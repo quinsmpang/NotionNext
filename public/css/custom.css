@@ -1,8 +1,13 @@
 /* 静态文件导入 自定义样式*/
 
-#theme-fukasawa .sideLeft hr{
+#theme-fukasawa .sideLeft hr {
     opacity: .04;
 }
+
 .fa-info:before {
     content: "\f05a";
+}
+
+.notion {
+    font-size: 0.8rem;
 }
