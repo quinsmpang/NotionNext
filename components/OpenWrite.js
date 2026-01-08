@@ -1,4 +1,5 @@
 import { siteConfig } from '@/lib/config'
+import { useGlobal } from '@/lib/global'
 import { isBrowser, loadExternalResource } from '@/lib/utils'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
@@ -21,17 +22,15 @@ const OpenWrite = () => {
   )
   // 验证一次后的有效时长，单位小时
   const cookieAge = siteConfig('OPEN_WRITE_VALIDITY_DURATION', 1)
-  // 白名单
+  // 白名单，想要放行的页面
   const whiteList = siteConfig('OPEN_WRITE_WHITE_LIST', '')
+  // 黄名单，优先级最高，设置后只有这里的路径会被上锁，其他页面自动全部放行
+  const yellowList = siteConfig('OPEN_WRITE_YELLOW_LIST', '')
+
+  // 登录信息
+  const { isLoaded, isSignedIn } = useGlobal()
 
   const loadOpenWrite = async () => {
-    const existWhite = existedWhiteList(router.asPath, whiteList)
-
-    // 如果当前页面在白名单中，则屏蔽加锁
-    if (existWhite) {
-      return
-    }
-
     try {
       await loadExternalResource(
         'https://readmore.openwrite.cn/js/readmore-2.0.js',
@@ -51,56 +50,108 @@ const OpenWrite = () => {
           blogId,
           cookieAge
         })
+
+        // btw初始化后，开始监听read-more-wrap何时消失
+        const intervalId = setInterval(() => {
+          const readMoreWrapElement = document.getElementById('read-more-wrap')
+          const articleWrapElement = document.getElementById('article-wrapper')
+
+          if (!readMoreWrapElement && articleWrapElement) {
+            toggleTocItems(false) // 恢复目录项的点击
+            // 自动调整文章区域的高度
+            articleWrapElement.style.height = 'auto'
+            // 停止定时器
+            clearInterval(intervalId)
+          }
+        }, 1000) // 每秒检查一次
+
+        // Return cleanup function to clear the interval if the component unmounts
+        return () => clearInterval(intervalId)
       }
     } catch (error) {
       console.error('OpenWrite 加载异常', error)
     }
   }
-
   useEffect(() => {
-    if (isBrowser && blogId) {
-      // Check if the element with id 'read-more-wrap' already exists
+    const isInYellowList = isPathInList(router.asPath, yellowList)
+    const isInWhiteList = isPathInList(router.asPath, whiteList)
+  
+    // 优先判断黄名单
+    if (yellowList && yellowList.length > 0) {
+      if (!isInYellowList) {
+        console.log('当前路径不在黄名单中，放行')
+        return
+      }
+    } else if (isInWhiteList) {
+      // 白名单中，免检
+      console.log('当前路径在白名单中，放行')
+      return
+    }
+  
+    if (isSignedIn) {
+      // 用户已登录免检
+      console.log('用户已登录，放行')
+      return
+    }
+  
+    if (process.env.NODE_ENV === 'development') {
+      // 开发环境免检
+      console.log('开发环境:屏蔽OpenWrite')
+      return
+    }
+  
+    if (isBrowser && blogId && !isSignedIn) {
+      toggleTocItems(true) // 禁止目录项的点击
+  
+      // 检查是否已加载
       const readMoreWrap = document.getElementById('read-more-wrap')
-
-      // Only load the script if the element doesn't exist
       if (!readMoreWrap) {
         loadOpenWrite()
       }
     }
-  })
+  }, [isLoaded, router])
+
+  // 启动一个监听器，当页面上存在#read-more-wrap对象时，所有的 a .catalog-item 对象都禁止点击
 
   return <></>
 }
 
+// 定义禁用和恢复目录项点击的函数
+const toggleTocItems = disable => {
+  const tocItems = document.querySelectorAll('a.catalog-item')
+  tocItems.forEach(item => {
+    if (disable) {
+      item.style.pointerEvents = 'none'
+      item.style.opacity = '0.5'
+    } else {
+      item.style.pointerEvents = 'auto'
+      item.style.opacity = '1'
+    }
+  })
+}
+
 /**
- * 检查白名单
+ * 检查路径是否在名单中
  * @param {*} path 当前url的字符串
- * @param {*} whiteListStr 白名单字符串
+ * @param {*} listStr 名单字符串，逗号分隔
  */
-function existedWhiteList(path, whiteListStr) {
-  // 参数检查
-  if (!path || !whiteListStr) {
-    return true
+function isPathInList(path, listStr) {
+  if (!path || !listStr) {
+    return false
   }
 
-  // 提取 path 最后一个斜杠后的内容，去掉前面的斜杆
-  // 移除查询参数（从 '?' 开始的部分）和 `.html` 后缀
+  // 提取 path 最后一个斜杠后的内容，并移除查询参数和 .html 后缀
   const processedPath = path
     .replace(/\?.*$/, '') // 移除查询参数
-    .replace(/.*\/([^/]+)(?:\.html)?$/, '$1') // 去掉前面的路径和 .html
+    .replace(/.*\/([^/]+)(?:\.html)?$/, '$1') // 提取最后部分
 
-  // 严格检查白名单字符串中是否包含处理后的 path
-  //   const whiteListArray = whiteListStr.split(',')
-  //   return whiteListArray.includes(processedPath)
+  const isInList = listStr.includes(processedPath)
 
-  // 放宽判断
-  const isWhite = whiteListStr.includes(processedPath)
-
-  if (isWhite) {
-    console.log('OpenWrite白名单', processedPath)
+  if (isInList) {
+    // console.log(`当前路径在名单中: ${processedPath}`)
   }
 
-  return isWhite
+  return isInList
 }
 
 export default OpenWrite
