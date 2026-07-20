@@ -9,8 +9,9 @@ export default function Header(props) {
   const { siteInfo } = props
   const { searchModal } = useQuinsmGlobal()
   const originalLogo = siteConfig('QUINSM_LOGO_IMG', null, CONFIG)
-  const logoSrc1x = originalLogo.replace(/\.png$/i, '@1x.png')
-  const logoSrc2x = originalLogo.replace(/\.png$/i, '@2x.png')
+  // 使用原始 logo 尺寸（264x65），与旧主题头部 65px 高度保持一致
+  // 旧主题没有提供高 DPR 适配图，直接用原图避免 1x/2x 图被强制放大
+  const logoSrc = originalLogo
 
   const handleSearch = () => {
     if (siteConfig('ALGOLIA_APP_ID')) {
@@ -29,12 +30,11 @@ export default function Header(props) {
           <h1 className='site-title v-floatLeft'>
             <a href='/' title={siteConfig('TITLE')}>
               <img
-                src={logoSrc1x}
-                srcSet={`${logoSrc1x} 1x, ${logoSrc2x} 2x`}
+                src={logoSrc}
                 alt={siteConfig('TITLE')}
-                className='h-8 w-auto'
-                width='130'
-                height='32'
+                className='h-[65px] w-auto'
+                width='264'
+                height='65'
                 decoding='async'
               />
             </a>
