@@ -3,8 +3,8 @@ import CONFIG from './config'
 import { themeConsoleStyle } from '@/lib/themeConsoleStyle'
 
 /**
- * 主题样式：仅保留夜间模式与控制台标识；关键布局覆盖已写入 /quinsm/quinsm.min.css，
- * 避免 styled-jsx 在 body 中延迟注入导致首屏布局偏移。
+ * 主题样式：仅保留 NotionNext 集成所需的覆盖与夜间模式兼容。
+ * 旧主题 Pure 的原始样式由 /quinsm/quinsm.min.css 提供。
  */
 const Style = () => {
   return (
@@ -78,17 +78,33 @@ const Style = () => {
         font-size: 0.85em;
         line-height: 1.6;
       }
+
+      /* 文章底部提示 */
       #theme-quinsm .post-bottom-notice {
-        font-size: 0.875rem;
-        color: rgba(0, 0, 0, 0.55);
-        margin: 1.5rem 0;
-        padding: 0.75rem 1rem;
-        background: rgba(0, 0, 0, 0.03);
-        border-radius: 0.375rem;
+        background-color: #f8f8f8;
+        padding: 5px 15px;
+        font-size: 14px;
+        margin-bottom: 20px;
       }
       #theme-quinsm .post-bottom-notice a {
         color: inherit;
         text-decoration: underline;
+      }
+
+      /* Logo 由图片自身决定尺寸，避免被 Tailwind 或其他样式压扁 */
+      #theme-quinsm .site-title img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+      }
+
+      /* 首页文章列表：恢复旧主题 link 高亮 */
+      #theme-quinsm .link--accent,
+      #theme-quinsm .cute {
+        color: #f3a500;
+      }
+      #theme-quinsm .block-title a:hover {
+        color: #f3a500;
       }
 
       /* 夜间模式简单兼容 */
@@ -102,53 +118,6 @@ const Style = () => {
       }
       .dark #theme-quinsm .site-title img {
         filter: invert(0.9);
-      }
-
-      /* Logo 尺寸：匹配原主题 264×65，移动端自适应 */
-      #theme-quinsm .site-title .site-logo-img {
-        display: block;
-        width: auto;
-        height: 65px;
-        max-width: 100%;
-      }
-      @media screen and (max-width: 640px) {
-        #theme-quinsm .site-title .site-logo-img {
-          height: 40px;
-        }
-      }
-
-      /* 列表缩略图恢复旧主题左浮动样式 */
-      #theme-quinsm .block--list .block-image {
-        float: left;
-        width: 140px;
-        height: 120px;
-        margin-right: 25px;
-        background-size: cover;
-        background-position: center center;
-        background-repeat: no-repeat;
-      }
-      #theme-quinsm .block--list .block-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-      #theme-quinsm .block--list.block--withoutImage .block-content {
-        margin-left: 0;
-      }
-      @media screen and (max-width: 1180px) {
-        #theme-quinsm .block--list .block-image {
-          float: right;
-          width: 100px;
-          height: 100px;
-          margin-left: 20px;
-          margin-right: 0;
-        }
-      }
-      @media screen and (max-width: 640px) {
-        #theme-quinsm .block--list .block-image {
-          width: 80px;
-          height: 80px;
-        }
       }
       .dark #theme-quinsm .entry-meta,
       .dark #theme-quinsm .post-bottom-notice {

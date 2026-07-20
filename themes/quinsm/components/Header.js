@@ -3,7 +3,7 @@ import CONFIG from '../config'
 import { useQuinsmGlobal } from '..'
 
 /**
- * 顶部 Metabar
+ * 顶部 Metabar（对齐旧主题 Pure）
  */
 export default function Header(props) {
   const { siteInfo } = props
@@ -11,7 +11,6 @@ export default function Header(props) {
   const originalLogo = siteConfig('QUINSM_LOGO_IMG', null, CONFIG)
   const isPngLogo = originalLogo.endsWith('.png')
   const retinaLogo = isPngLogo ? originalLogo.replace(/\.png$/, '@2x.png') : ''
-  // 旧主题头部高度 65px；在移动端适当缩小，避免小屏下导航栏过高
   const logoSrcSet = retinaLogo
     ? `${originalLogo} 1x, ${retinaLogo} 2x`
     : undefined
@@ -34,7 +33,6 @@ export default function Header(props) {
                 src={originalLogo}
                 srcSet={logoSrcSet}
                 alt={siteConfig('TITLE')}
-                className='site-logo-img'
                 decoding='async'
                 fetchpriority='high'
               />

@@ -1,81 +1,59 @@
-import LazyImage from '@/components/LazyImage'
 import { siteConfig } from '@/lib/config'
 import { useGlobal } from '@/lib/global'
-import CONFIG from '../config'
-import { toWebp } from '../lib/toWebp'
 
 /**
- * 首页文章列表项
+ * 首页文章列表项（严格对齐旧主题 Pure 三段式结构）
  */
 export default function BlogItem(props) {
   const { post } = props
-  const { NOTION_CONFIG } = useGlobal()
-  const showCover = siteConfig('QUINSM_POST_COVER_ENABLE', true, CONFIG)
-  const showPreview =
-    siteConfig('POST_LIST_PREVIEW', false, NOTION_CONFIG) && post.blockMap
+  const { locale } = useGlobal()
   const accessibleTitle = post.title || post.summary || post.slug || 'Untitled'
-
-  const hasCover = showCover && post?.pageCoverThumbnail
+  const publishTime = post.date?.start_date || post.createdTime
 
   return (
     <article
-      className={`block block--inset block--list ${
-        !hasCover ? 'block--withoutImage' : ''
-      }`}
+      className='block block--inset block--list'
+      itemType='http://schema.org/Article'
+      itemScope='itemscope'
     >
-      {hasCover && (
-        <a
-          className='block-image effect-apollo'
-          href={post.href}
-          aria-label={accessibleTitle}
-        >
-          <LazyImage
-            src={toWebp(post.pageCoverThumbnail)}
-            alt={accessibleTitle}
-            className='v-hide'
-          />
-        </a>
-      )}
-      <div className='block-content'>
+      {/* 顶部作者/时间元信息 */}
+      <div className='block-postMeta v-overflowHidden'>
+        <div className='v-alignLeft'>
+          <div className='postMetaInline-feedSummary'>
+            <a
+              className='link link--accent link--darken'
+              href='/'
+              title={`Go to the profile of ${siteConfig('AUTHOR')}`}
+            >
+              {siteConfig('AUTHOR')}
+            </a>
+            <span className='postMetaInline postMetaInline--supplemental'>
+              {publishTime}
+            </span>
+          </div>
+        </div>
+        <div className='v-alignRight'></div>
+      </div>
+
+      {/* 标题与摘要 */}
+      <div className='block-streamText'>
         <h2 className='block-title' itemProp='headline'>
           <a href={post.href} aria-label={accessibleTitle}>
             {accessibleTitle}
           </a>
         </h2>
         <div className='block-snippet block-snippet--subtitle' itemProp='about'>
-          {!showPreview && (
-            <>
-              {post.summary}
-              {post.summary && <span>...</span>}
-            </>
-          )}
-          {showPreview && post?.blockMap && (
-            <span>Preview mode is not supported in this theme.</span>
-          )}
+          {post.summary}
         </div>
-        <div className='v-clearfix block-postMetaWrap'>
-          <div className='block-postMeta'>
-            <time itemProp='datePublished'>
-              {post.date?.start_date || post.createdTime}
-            </time>
-            {post.category && (
-              <>
-                {' '}
-                in{' '}
-                <span itemProp='articleSection'>
-                  <a href={`/category/${post.category}`} rel='category tag'>
-                    {post.category}
-                  </a>
-                </span>
-              </>
-            )}{' '}
-            by{' '}
-            <span itemProp='author'>
-              <a className='cute' href='/'>
-                {siteConfig('AUTHOR')}
-              </a>
-            </span>
-          </div>
+      </div>
+
+      {/* 底部阅读更多 */}
+      <div className='block-postMeta postMeta-previewFooter'>
+        <div className='v-alignLeft'>
+          <a className='link link--accent cute' href={post.href}>
+            {locale.COMMON.READ_MORE || 'Continue reading'}
+          </a>
+          <span className='middotDivider'></span>
         </div>
       </div>
     </article>

@@ -6,7 +6,7 @@ import CONFIG from '../config'
  * 侧边栏
  */
 export default function SideBar(props) {
-  const { latestPosts, tagOptions, customMenu, notice } = props
+  const { latestPosts, tagOptions, customMenu } = props
   const { locale } = useGlobal()
 
   let navLinks = []
@@ -29,7 +29,6 @@ export default function SideBar(props) {
         href: '/tag',
         show: siteConfig('QUINSM_MENU_TAG', true, CONFIG)
       },
-      { name: '留言板', href: '/guestbook', show: true },
       {
         name: locale.NAV.SEARCH,
         href: '/search',

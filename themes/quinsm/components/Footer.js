@@ -1,5 +1,4 @@
 import { siteConfig } from '@/lib/config'
-import CONFIG from '../config'
 
 /**
  * 页脚
@@ -15,16 +14,18 @@ export default function Footer() {
     <footer
       id='bentoHomepageFooter'
       className='layoutSingleColumn layoutSingleColumn--wide footer v-bentoHomepageFooter'
-      role='contentinfo'>
+      role='contentinfo'
+    >
       <div className='site-info fontSmooth'>
-        <p
-          dangerouslySetInnerHTML={{
-            __html: siteConfig('QUINSM_FOOTER_TEXT', null, CONFIG)
-          }}
-        />
         <p>
-          &copy;{`${copyrightDate}`} {siteConfig('AUTHOR')}.{' '}
-          {siteConfig('QUINSM_FOOTER_COPYRIGHT', null, CONFIG)}
+          <a href='/' title={siteConfig('TITLE')}>
+            {siteConfig('TITLE')}
+          </a>{' '}
+          with <span className='cute iconfont icon-heart'></span>
+        </p>
+        <p>
+          &copy;{`${copyrightDate}`} {siteConfig('AUTHOR')}. All rights
+          reserved.
         </p>
       </div>
     </footer>
