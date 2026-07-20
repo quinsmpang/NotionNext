@@ -24,9 +24,7 @@ const BlogArchiveItem = dynamic(() => import('./components/BlogArchiveItem'), {
 const ArticleLock = dynamic(() => import('./components/ArticleLock'), {
   ssr: false
 })
-const ArticleInfo = dynamic(() => import('./components/ArticleInfo'), {
-  ssr: false
-})
+import ArticleInfo from './components/ArticleInfo'
 const Comment = dynamic(() => import('@/components/Comment'), { ssr: false })
 const ArticleAround = dynamic(() => import('./components/ArticleAround'), {
   ssr: false
@@ -35,10 +33,9 @@ const ShareBar = dynamic(() => import('@/components/ShareBar'), { ssr: false })
 import Header from './components/Header'
 import Footer from './components/Footer'
 import SideBar from './components/SideBar'
-const JumpToTopButton = dynamic(
-  () => import('./components/JumpToTopButton'),
-  { ssr: false }
-)
+const JumpToTopButton = dynamic(() => import('./components/JumpToTopButton'), {
+  ssr: false
+})
 const SearchInput = dynamic(() => import('./components/SearchInput'), {
   ssr: false
 })
@@ -58,7 +55,10 @@ const LayoutBase = props => {
 
   return (
     <ThemeGlobalQuinsm.Provider value={{ searchModal }}>
-      <div id='theme-quinsm' className={`${siteConfig('FONT_STYLE')} site-main`}>
+      <div
+        id='theme-quinsm'
+        className={`${siteConfig('FONT_STYLE')} site-main`}
+      >
         <Style />
         <Header {...props} />
         <div className='surface-container'>{children}</div>
@@ -185,7 +185,11 @@ const LayoutSlug = props => {
           <div className='layoutSingleColumn--main'>
             <article className='postArticle'>
               <ArticleInfo post={post} />
-              <div id='article-wrapper' className='entry-content' itemProp='articleBody'>
+              <div
+                id='article-wrapper'
+                className='entry-content'
+                itemProp='articleBody'
+              >
                 <NotionPage post={post} />
               </div>
               <div className='postFooter-ad v-textAlignCenter v-overflowHidden'>
@@ -195,7 +199,11 @@ const LayoutSlug = props => {
                 <div
                   className='post-bottom-notice fontSmooth'
                   dangerouslySetInnerHTML={{
-                    __html: siteConfig('QUINSM_POST_BOTTOM_NOTICE', null, CONFIG)
+                    __html: siteConfig(
+                      'QUINSM_POST_BOTTOM_NOTICE',
+                      null,
+                      CONFIG
+                    )
                   }}
                 />
                 <ShareBar post={post} />
@@ -278,7 +286,8 @@ const LayoutCategoryIndex = props => {
         {categoryOptions?.map(category => (
           <article
             key={category.name}
-            className='block block--inset block--list block--withoutImage'>
+            className='block block--inset block--list block--withoutImage'
+          >
             <div className='block-content'>
               <h2 className='block-title'>
                 <a href={`/category/${category.name}`}>{category.name}</a>
@@ -310,7 +319,8 @@ const LayoutTagIndex = props => {
             key={tag.name}
             href={`/tag/${encodeURIComponent(tag.name)}`}
             className='tag-item'
-            title={`${tag.name} (${tag.count})`}>
+            title={`${tag.name} (${tag.count})`}
+          >
             <span>
               {tag.name}
               {tag.count ? ` (${tag.count})` : ''}

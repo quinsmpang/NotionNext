@@ -7,13 +7,22 @@ const CONFIG = {
   THEME_SWITCH: false,
   DEBUG: false,
 
-  QUINSM_LOGO_IMG: process.env.NEXT_PUBLIC_THEME_QUINSM_LOGO_IMG || '/quinsm/imgs/quinsmpang_logo.png',
-  QUINSM_AUTHOR_AVATAR: process.env.NEXT_PUBLIC_THEME_QUINSM_AUTHOR_AVATAR || '/quinsm/icon/icon.jpeg',
-  QUINSM_FOOTER_TEXT: process.env.NEXT_PUBLIC_THEME_QUINSM_FOOTER_TEXT || 'Pure with <span class="cute iconfont icon-heart"></span>',
-  QUINSM_FOOTER_COPYRIGHT: process.env.NEXT_PUBLIC_THEME_QUINSM_FOOTER_COPYRIGHT || 'Welcome to wordpress.',
+  QUINSM_LOGO_IMG:
+    process.env.NEXT_PUBLIC_THEME_QUINSM_LOGO_IMG ||
+    '/quinsm/imgs/quinsmpang_logo.png',
+  QUINSM_AUTHOR_AVATAR:
+    process.env.NEXT_PUBLIC_THEME_QUINSM_AUTHOR_AVATAR ||
+    '/quinsm/icon/icon.jpeg',
+  QUINSM_FOOTER_TEXT:
+    process.env.NEXT_PUBLIC_THEME_QUINSM_FOOTER_TEXT ||
+    'Pure with <span class="cute iconfont icon-heart"></span>',
+  QUINSM_FOOTER_COPYRIGHT:
+    process.env.NEXT_PUBLIC_THEME_QUINSM_FOOTER_COPYRIGHT ||
+    '齿轮游戏 版权所有',
 
   // 是否显示文章封面缩略图（默认关闭，避免 Notion 外链图片引入第三方 Cookie 与布局偏移）
-  QUINSM_POST_COVER_ENABLE: process.env.NEXT_PUBLIC_THEME_QUINSM_POST_COVER_ENABLE || false,
+  QUINSM_POST_COVER_ENABLE:
+    process.env.NEXT_PUBLIC_THEME_QUINSM_POST_COVER_ENABLE || false,
 
   // 侧边栏 widget 开关
   QUINSM_SIDEBAR_NAV: true,
@@ -21,7 +30,8 @@ const CONFIG = {
   QUINSM_SIDEBAR_TAGS: true,
 
   // 文章底部提示
-  QUINSM_POST_BOTTOM_NOTICE: '如对文章内容有疑问请在文章下或者<a href="/about" class="cute">留言板</a>留言。',
+  QUINSM_POST_BOTTOM_NOTICE:
+    '如对文章内容有疑问请在文章下或者<a href="/guestbook" class="cute">留言板</a>留言。',
 
   // 菜单配置
   QUINSM_MENU_CATEGORY: true,

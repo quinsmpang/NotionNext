@@ -9,9 +9,12 @@ export default function Header(props) {
   const { siteInfo } = props
   const { searchModal } = useQuinsmGlobal()
   const originalLogo = siteConfig('QUINSM_LOGO_IMG', null, CONFIG)
-  // 使用原始 logo 尺寸（264x65），与旧主题头部 65px 高度保持一致
-  // 旧主题没有提供高 DPR 适配图，直接用原图避免 1x/2x 图被强制放大
-  const logoSrc = originalLogo
+  const isPngLogo = originalLogo.endsWith('.png')
+  const retinaLogo = isPngLogo ? originalLogo.replace(/\.png$/, '@2x.png') : ''
+  // 旧主题头部高度 65px；在移动端适当缩小，避免小屏下导航栏过高
+  const logoSrcSet = retinaLogo
+    ? `${originalLogo} 1x, ${retinaLogo} 2x`
+    : undefined
 
   const handleSearch = () => {
     if (siteConfig('ALGOLIA_APP_ID')) {
@@ -22,20 +25,20 @@ export default function Header(props) {
   }
 
   return (
-    <header
-      id='header-nav'
-      className='metabar metabar--dark v-clearfix'>
+    <header id='header-nav' className='metabar metabar--dark v-clearfix'>
       <div className='layoutSingleColumn layoutSingleColumn--wide fontSmooth'>
         <div className='metabar-block v-floatLeft'>
           <h1 className='site-title v-floatLeft'>
             <a href='/' title={siteConfig('TITLE')}>
               <img
-                src={logoSrc}
+                src={originalLogo}
+                srcSet={logoSrcSet}
                 alt={siteConfig('TITLE')}
-                className='h-[65px] w-auto'
+                className='h-8 w-auto md:h-[65px]'
                 width='264'
                 height='65'
                 decoding='async'
+                fetchpriority='high'
               />
             </a>
           </h1>
@@ -45,12 +48,11 @@ export default function Header(props) {
             <button
               className='button button--circle is-inSiteNavBar js-action'
               onClick={handleSearch}
-              aria-label='Search'>
+              aria-label='Search'
+            >
               <i className='iconfont icon-search'></i>
             </button>
-            <a
-              className='metabar-user-avatar js-action'
-              href='/about'>
+            <a className='metabar-user-avatar js-action' href='/about'>
               <img
                 alt={siteConfig('AUTHOR')}
                 src={siteConfig('QUINSM_AUTHOR_AVATAR', null, CONFIG)}

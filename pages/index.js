@@ -74,27 +74,35 @@ export async function getStaticProps(req) {
     'page',
     props?.NOTION_CONFIG
   )
+  const POSTS_PER_PAGE = siteConfig('POSTS_PER_PAGE', 12, props?.NOTION_CONFIG)
   if (POST_LIST_STYLE === 'scroll') {
     // 滚动列表默认给前端返回所有数据
   } else if (POST_LIST_STYLE === 'page') {
-    props.posts = props.posts?.slice(
-      0,
-      siteConfig('POSTS_PER_PAGE', 12, props?.NOTION_CONFIG)
-    )
+    props.posts = props.posts?.slice(0, POSTS_PER_PAGE)
   }
+
+  // 分页信息
+  props.page = 1
+  props.totalPages = Math.ceil(
+    (props.postCount || props.posts?.length || 0) / POSTS_PER_PAGE
+  )
 
   // 预览文章内容
   if (POST_LIST_PREVIEW) {
     const previewLimit = pLimit(
       siteConfig('POST_PREVIEW_CONCURRENCY', 5, props?.NOTION_CONFIG)
     )
-    const previewTargets = props.posts.filter(
-      post => !post.password || post.password === ''
-    ).slice(0, POST_PREVIEW_MAX_COUNT)
+    const previewTargets = props.posts
+      .filter(post => !post.password || post.password === '')
+      .slice(0, POST_PREVIEW_MAX_COUNT)
     await Promise.all(
       previewTargets.map(post =>
         previewLimit(async () => {
-          const rawBlockMap = await getPostBlocks(post.id, 'slug', POST_PREVIEW_LINES)
+          const rawBlockMap = await getPostBlocks(
+            post.id,
+            'slug',
+            POST_PREVIEW_LINES
+          )
           post.blockMap = adapterNotionBlockMap(rawBlockMap)
           if (post.blockMap?.block) {
             post.blockMap.block = formatNotionBlock(post.blockMap.block)
