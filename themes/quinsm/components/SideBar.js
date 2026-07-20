@@ -14,7 +14,6 @@ export default function SideBar(props) {
     navLinks = customMenu.filter(item => item && item.show !== false)
   } else {
     navLinks = [
-      { name: locale.NAV.INDEX, href: '/', show: true },
       {
         name: locale.NAV.ARCHIVE,
         href: '/archive',
@@ -58,8 +57,6 @@ export default function SideBar(props) {
                 <br />
               </a>
             ))}
-            <a href='/guestbook'>留言板</a>
-            <br />
           </div>
         </aside>
       )}

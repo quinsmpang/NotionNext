@@ -103,6 +103,53 @@ const Style = () => {
       .dark #theme-quinsm .site-title img {
         filter: invert(0.9);
       }
+
+      /* Logo 尺寸：匹配原主题 264×65，移动端自适应 */
+      #theme-quinsm .site-title .site-logo-img {
+        display: block;
+        width: auto;
+        height: 65px;
+        max-width: 100%;
+      }
+      @media screen and (max-width: 640px) {
+        #theme-quinsm .site-title .site-logo-img {
+          height: 40px;
+        }
+      }
+
+      /* 列表缩略图恢复旧主题左浮动样式 */
+      #theme-quinsm .block--list .block-image {
+        float: left;
+        width: 140px;
+        height: 120px;
+        margin-right: 25px;
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+      }
+      #theme-quinsm .block--list .block-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      #theme-quinsm .block--list.block--withoutImage .block-content {
+        margin-left: 0;
+      }
+      @media screen and (max-width: 1180px) {
+        #theme-quinsm .block--list .block-image {
+          float: right;
+          width: 100px;
+          height: 100px;
+          margin-left: 20px;
+          margin-right: 0;
+        }
+      }
+      @media screen and (max-width: 640px) {
+        #theme-quinsm .block--list .block-image {
+          width: 80px;
+          height: 80px;
+        }
+      }
       .dark #theme-quinsm .entry-meta,
       .dark #theme-quinsm .post-bottom-notice {
         color: rgba(255, 255, 255, 0.55);

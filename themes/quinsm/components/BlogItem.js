@@ -15,16 +15,20 @@ export default function BlogItem(props) {
     siteConfig('POST_LIST_PREVIEW', false, NOTION_CONFIG) && post.blockMap
   const accessibleTitle = post.title || post.summary || post.slug || 'Untitled'
 
+  const hasCover = showCover && post?.pageCoverThumbnail
+
   return (
-    <article className='block block--inset block--list'>
-      {showCover && post?.pageCoverThumbnail && (
+    <article
+      className={`block block--inset block--list ${
+        !hasCover ? 'block--withoutImage' : ''
+      }`}
+    >
+      {hasCover && (
         <a
           className='block-image effect-apollo'
           href={post.href}
           aria-label={accessibleTitle}
-          style={{
-            backgroundImage: `url(${toWebp(post.pageCoverThumbnail)})`
-          }}>
+        >
           <LazyImage
             src={toWebp(post.pageCoverThumbnail)}
             alt={accessibleTitle}
@@ -51,7 +55,9 @@ export default function BlogItem(props) {
         </div>
         <div className='v-clearfix block-postMetaWrap'>
           <div className='block-postMeta'>
-            <time itemProp='datePublished'>{post.date?.start_date || post.createdTime}</time>
+            <time itemProp='datePublished'>
+              {post.date?.start_date || post.createdTime}
+            </time>
             {post.category && (
               <>
                 {' '}
@@ -62,10 +68,10 @@ export default function BlogItem(props) {
                   </a>
                 </span>
               </>
-            )}
-            {' '}by{' '}
+            )}{' '}
+            by{' '}
             <span itemProp='author'>
-              <a className='cute' href='/about'>
+              <a className='cute' href='/'>
                 {siteConfig('AUTHOR')}
               </a>
             </span>

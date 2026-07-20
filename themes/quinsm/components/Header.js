@@ -34,9 +34,7 @@ export default function Header(props) {
                 src={originalLogo}
                 srcSet={logoSrcSet}
                 alt={siteConfig('TITLE')}
-                className='h-8 w-auto md:h-[65px]'
-                width='264'
-                height='65'
+                className='site-logo-img'
                 decoding='async'
                 fetchpriority='high'
               />
@@ -52,7 +50,7 @@ export default function Header(props) {
             >
               <i className='iconfont icon-search'></i>
             </button>
-            <a className='metabar-user-avatar js-action' href='/about'>
+            <a className='metabar-user-avatar js-action' href='/'>
               <img
                 alt={siteConfig('AUTHOR')}
                 src={siteConfig('QUINSM_AUTHOR_AVATAR', null, CONFIG)}
