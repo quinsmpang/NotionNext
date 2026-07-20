@@ -20,9 +20,9 @@ const CONFIG = {
     process.env.NEXT_PUBLIC_THEME_QUINSM_FOOTER_COPYRIGHT ||
     '齿轮游戏 版权所有',
 
-  // 是否显示文章封面缩略图（默认关闭，避免 Notion 外链图片引入第三方 Cookie 与布局偏移）
+  // 是否显示文章封面缩略图（开启后会优先使用 Notion 页面封面，未设置则自动抓取正文第一张图片）
   QUINSM_POST_COVER_ENABLE:
-    process.env.NEXT_PUBLIC_THEME_QUINSM_POST_COVER_ENABLE || false,
+    process.env.NEXT_PUBLIC_THEME_QUINSM_POST_COVER_ENABLE !== 'false',
 
   // 侧边栏 widget 开关
   QUINSM_SIDEBAR_NAV: true,
