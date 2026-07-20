@@ -233,6 +233,15 @@ const SEO = props => {
         }}
       />
 
+      {/* GEO 与地区信号 */}
+      {siteConfig('GEO_POSITION') && (
+        <meta name='geo.position' content={siteConfig('GEO_POSITION')} />
+      )}
+      {siteConfig('GEO_ICBM') && <meta name='ICBM' content={siteConfig('GEO_ICBM')} />}
+      {siteConfig('GEO_PLACENAME') && (
+        <meta name='geo.placename' content={siteConfig('GEO_PLACENAME')} />
+      )}
+
       {/* DNS预取和预连接 */}
       {hasWebFontUrl && <link rel='dns-prefetch' href='//fonts.googleapis.com' />}
       <link rel='dns-prefetch' href='//www.google-analytics.com' />
@@ -267,6 +276,32 @@ export const generateStructuredData = (
   author,
   siteUrl
 ) => {
+  const logoUrl = getAbsoluteImageUrl(
+    siteConfig('QUINSM_AUTHOR_AVATAR') || siteConfig('BLOG_FAVICON') || siteInfo?.icon,
+    siteUrl
+  )
+  const siteLink = siteConfig('LINK')
+  const facebook = siteConfig('FACEBOOK_PAGE')
+  const twitter = siteConfig('TWITTER_SITE')
+  const twitterUrl =
+    typeof twitter === 'string' && twitter.startsWith('@')
+      ? `https://twitter.com/${twitter.slice(1)}`
+      : twitter
+  const sameAs = [siteLink, facebook, twitterUrl].filter(
+    u => typeof u === 'string' && u.startsWith('http')
+  )
+
+  const publisher = {
+    '@type': 'Organization',
+    name: siteInfo?.title,
+    url: siteUrl,
+    logo: {
+      '@type': 'ImageObject',
+      url: logoUrl
+    },
+    sameAs
+  }
+
   const baseData = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
@@ -277,13 +312,15 @@ export const generateStructuredData = (
       '@type': 'Person',
       name: author
     },
-    publisher: {
-      '@type': 'Organization',
-      name: siteInfo?.title,
-      logo: {
-        '@type': 'ImageObject',
-        url: getAbsoluteImageUrl(siteInfo?.icon, siteUrl)
-      }
+    publisher,
+    sameAs,
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${createSiteUrl(siteUrl, 'search')}?s={search_term_string}`
+      },
+      'query-input': 'required name=search_term_string'
     }
   }
 
@@ -302,14 +339,7 @@ export const generateStructuredData = (
         '@type': 'Person',
         name: author
       },
-      publisher: {
-        '@type': 'Organization',
-        name: siteInfo?.title,
-        logo: {
-          '@type': 'ImageObject',
-          url: getAbsoluteImageUrl(siteInfo?.icon, siteUrl)
-        }
-      },
+      publisher,
       mainEntityOfPage: {
         '@type': 'WebPage',
         '@id': url
@@ -358,7 +388,7 @@ const getSEOMeta = (props, router, locale) => {
       return {
         title: `${siteInfo?.title} | ${siteInfo?.description}`,
         description: `${siteInfo?.description}`,
-        image: `${siteInfo?.pageCover}`,
+        image: `${siteConfig('HOME_BANNER_IMAGE', siteInfo?.pageCover)}`,
         slug: '',
         type: 'website'
       }
@@ -366,7 +396,7 @@ const getSEOMeta = (props, router, locale) => {
       return {
         title: `${locale.NAV.ARCHIVE} | ${siteInfo?.title}`,
         description: `${siteInfo?.description}`,
-        image: `${siteInfo?.pageCover}`,
+        image: `${siteConfig('HOME_BANNER_IMAGE', siteInfo?.pageCover)}`,
         slug: 'archive',
         type: 'website'
       }
@@ -374,7 +404,7 @@ const getSEOMeta = (props, router, locale) => {
       return {
         title: `${page} | Page | ${siteInfo?.title}`,
         description: `${siteInfo?.description}`,
-        image: `${siteInfo?.pageCover}`,
+        image: `${siteConfig('HOME_BANNER_IMAGE', siteInfo?.pageCover)}`,
         slug: 'page/' + page,
         type: 'website'
       }
@@ -383,7 +413,7 @@ const getSEOMeta = (props, router, locale) => {
         title: `${category} | ${locale.COMMON.CATEGORY} | ${siteInfo?.title}`,
         description: `${siteInfo?.description}`,
         slug: 'category/' + category,
-        image: `${siteInfo?.pageCover}`,
+        image: `${siteConfig('HOME_BANNER_IMAGE', siteInfo?.pageCover)}`,
         type: 'website'
       }
     case '/category/[category]/page/[page]':
@@ -391,7 +421,7 @@ const getSEOMeta = (props, router, locale) => {
         title: `${category} | ${locale.COMMON.CATEGORY} | ${siteInfo?.title}`,
         description: `${siteInfo?.description}`,
         slug: 'category/' + category,
-        image: `${siteInfo?.pageCover}`,
+        image: `${siteConfig('HOME_BANNER_IMAGE', siteInfo?.pageCover)}`,
         type: 'website'
       }
     case '/tag/[tag]':
@@ -399,7 +429,7 @@ const getSEOMeta = (props, router, locale) => {
       return {
         title: `${tag} | ${locale.COMMON.TAGS} | ${siteInfo?.title}`,
         description: `${siteInfo?.description}`,
-        image: `${siteInfo?.pageCover}`,
+        image: `${siteConfig('HOME_BANNER_IMAGE', siteInfo?.pageCover)}`,
         slug: 'tag/' + tag,
         type: 'website'
       }
@@ -407,7 +437,7 @@ const getSEOMeta = (props, router, locale) => {
       return {
         title: `${keyword || ''}${keyword ? ' | ' : ''}${locale.NAV.SEARCH} | ${siteInfo?.title}`,
         description: `${siteInfo?.description}`,
-        image: `${siteInfo?.pageCover}`,
+        image: `${siteConfig('HOME_BANNER_IMAGE', siteInfo?.pageCover)}`,
         slug: 'search',
         type: 'website'
       }
@@ -416,20 +446,20 @@ const getSEOMeta = (props, router, locale) => {
       return {
         title: `${keyword || ''}${keyword ? ' | ' : ''}${locale.NAV.SEARCH} | ${siteInfo?.title}`,
         description: TITLE,
-        image: `${siteInfo?.pageCover}`,
+        image: `${siteConfig('HOME_BANNER_IMAGE', siteInfo?.pageCover)}`,
         slug: 'search/' + (keyword || ''),
         type: 'website'
       }
     case '/404':
       return {
         title: `${siteInfo?.title} | ${locale.NAV.PAGE_NOT_FOUND}`,
-        image: `${siteInfo?.pageCover}`
+        image: `${siteConfig('HOME_BANNER_IMAGE', siteInfo?.pageCover)}`
       }
     case '/tag':
       return {
         title: `${locale.COMMON.TAGS} | ${siteInfo?.title}`,
         description: `${siteInfo?.description}`,
-        image: `${siteInfo?.pageCover}`,
+        image: `${siteConfig('HOME_BANNER_IMAGE', siteInfo?.pageCover)}`,
         slug: 'tag',
         type: 'website'
       }
@@ -437,7 +467,7 @@ const getSEOMeta = (props, router, locale) => {
       return {
         title: `${locale.COMMON.CATEGORY} | ${siteInfo?.title}`,
         description: `${siteInfo?.description}`,
-        image: `${siteInfo?.pageCover}`,
+        image: `${siteConfig('HOME_BANNER_IMAGE', siteInfo?.pageCover)}`,
         slug: 'category',
         type: 'website'
       }
@@ -452,7 +482,7 @@ const getSEOMeta = (props, router, locale) => {
         description: post?.summary,
         type: post?.type,
         slug: post?.slug,
-        image: post?.pageCoverThumbnail || `${siteInfo?.pageCover}`,
+        image: post?.pageCoverThumbnail || `${siteConfig('HOME_BANNER_IMAGE', siteInfo?.pageCover)}`,
         category,
         tags: post?.tags,
         publishDay: post?.publishDay,

@@ -4,6 +4,14 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { getQueryParam, getQueryVariable, isBrowser } from '../lib/utils'
 
+// 对当前默认主题做静态导入，避免 next/dynamic 变量路径在 SSG 时无法产出 HTML，
+// 从而消除首屏空 DOM → 真实内容导致的 CLS 与渲染延迟。
+import * as quinsmStatic from '@/themes/quinsm'
+
+const STATIC_THEME_MODULES = {
+  quinsm: quinsmStatic
+}
+
 // 在next.config.js中扫描所有主题
 export const { THEMES = [] } = getConfig()?.publicRuntimeConfig || {}
 const baseLayoutCache = new Map()
@@ -94,6 +102,38 @@ const getThemeExport = (mod, exportName) => {
   return null
 }
 
+// 模块级预创建动态组件，确保 SSR 时能解析实际布局而非 loading 骨架
+const createThemeDynamicComponent = (themeName, layoutName) =>
+  dynamic(
+    () =>
+      import(`@/themes/${themeName}`).then(mod =>
+        getThemeExport(mod, layoutName) ||
+        getThemeExport(mod, 'LayoutSlug') ||
+        EmptyPageLayout
+      ),
+    { ssr: true, loading: getLayoutLoading(layoutName) }
+  )
+
+const themeLayoutComponents = {}
+THEMES.forEach(themeName => {
+  themeLayoutComponents[themeName] = {}
+  ;[
+    'LayoutIndex',
+    'LayoutPostList',
+    'LayoutSlug',
+    'LayoutArchive',
+    'LayoutSearch',
+    'LayoutCategoryIndex',
+    'LayoutTagIndex',
+    'Layout404'
+  ].forEach(layoutName => {
+    themeLayoutComponents[themeName][layoutName] = createThemeDynamicComponent(
+      themeName,
+      layoutName
+    )
+  })
+})
+
 const scheduleFixThemeDOM = (delay = 120) => {
   if (!isBrowser) return
   if (domFixTimer) {
@@ -130,11 +170,31 @@ async function importThemeLayout(themeFolderName, layoutName) {
 }
 
 async function resolveThemeLayout(themeName, layoutName, emptyLayout) {
+  const staticMod = STATIC_THEME_MODULES[themeName]
+  if (staticMod) {
+    const Layout =
+      getThemeExport(staticMod, layoutName) ||
+      getThemeExport(staticMod, 'LayoutSlug')
+    if (Layout) return Layout
+  }
+
   let Layout = await importThemeLayout(themeName, layoutName)
   if (Layout) return Layout
 
   const fallback = getFallbackThemeName(themeName)
   if (fallback) {
+    const fallbackStatic = STATIC_THEME_MODULES[fallback]
+    if (fallbackStatic) {
+      Layout =
+        getThemeExport(fallbackStatic, layoutName) ||
+        getThemeExport(fallbackStatic, 'LayoutSlug')
+      if (Layout) {
+        console.warn(
+          `[theme] "${themeName}" missing "${layoutName}", using fallback "${fallback}".`
+        )
+        return Layout
+      }
+    }
     Layout = await importThemeLayout(fallback, layoutName)
     if (Layout) {
       console.warn(
@@ -155,12 +215,22 @@ async function resolveThemeLayout(themeName, layoutName, emptyLayout) {
  */
 export const getThemeConfig = async themeQuery => {
   const themeName = normalizeThemeName(themeQuery)
+  const staticMod = STATIC_THEME_MODULES[themeName]
+  if (staticMod) {
+    const cfg = getThemeExport(staticMod, 'THEME_CONFIG')
+    if (cfg) return cfg
+  }
   let cfg = await importThemeConfig(themeName)
   if (cfg) {
     return cfg
   }
   const fallback = normalizeThemeName(BLOG.THEME)
   if (fallback !== themeName) {
+    const fallbackStatic = STATIC_THEME_MODULES[fallback]
+    if (fallbackStatic) {
+      const fallbackCfg = getThemeExport(fallbackStatic, 'THEME_CONFIG')
+      if (fallbackCfg) return fallbackCfg
+    }
     cfg = await importThemeConfig(fallback)
     if (cfg) {
       console.warn(
@@ -194,13 +264,23 @@ export const getBaseLayoutByTheme = theme => {
   if (baseLayoutCache.has(normalizedTheme)) {
     return baseLayoutCache.get(normalizedTheme)
   }
-  const DynamicBaseLayout = dynamic(
-    () =>
-      resolveThemeLayout(normalizedTheme, 'LayoutBase', EmptyBaseLayout),
-    { ssr: true }
-  )
-  baseLayoutCache.set(normalizedTheme, DynamicBaseLayout)
-  return DynamicBaseLayout
+
+  const staticMod = STATIC_THEME_MODULES[normalizedTheme]
+  let Layout
+  if (staticMod) {
+    Layout =
+      getThemeExport(staticMod, 'LayoutBase') ||
+      getThemeExport(staticMod, 'default') ||
+      EmptyBaseLayout
+  } else {
+    Layout = dynamic(
+      () =>
+        resolveThemeLayout(normalizedTheme, 'LayoutBase', EmptyBaseLayout),
+      { ssr: true }
+    )
+  }
+  baseLayoutCache.set(normalizedTheme, Layout)
+  return Layout
 }
 
 /**
@@ -229,6 +309,19 @@ export const useLayoutByTheme = ({ layoutName, theme }) => {
     return layoutByThemeCache.get(cacheKey)
   }
 
+  // 对静态导入的主题直接使用真实组件，避免 next/dynamic 在 SSG 时只渲染 loading
+  const staticMod = STATIC_THEME_MODULES[themeQuery]
+  if (staticMod) {
+    const StaticLayout =
+      getThemeExport(staticMod, layoutName) ||
+      getThemeExport(staticMod, 'LayoutSlug') ||
+      EmptyPageLayout
+    layoutByThemeCache.set(cacheKey, StaticLayout)
+    scheduleFixThemeDOM(themeQuery === BLOG.THEME ? 80 : 240)
+    return StaticLayout
+  }
+
+  // 兜底：运行时动态创建（用于 ?theme=xxx 等不在预创建列表的主题）
   const loadLayout = () =>
     resolveThemeLayout(themeQuery, layoutName, EmptyPageLayout)
   const DynamicLayoutComponent = dynamic(loadLayout, {

@@ -1,12 +1,15 @@
 // 注: process.env.XX是Vercel的环境变量，配置方式见：https://docs.tangly1024.com/article/how-to-config-notion-next#c4768010ae7d44609b744e79e2f9959a
 
+// 在构造 BLOG 对象前计算当前主题，供配置覆盖使用
+const CURRENT_THEME = process.env.NEXT_PUBLIC_THEME || 'quinsm'
+
 const BLOG = {
   API_BASE_URL: process.env.API_BASE_URL || 'https://www.notion.so/api/v3', // API默认请求地址,可以配置成自己的地址例如：https://[xxxxx].notion.site/api/v3
   // Important page_id！！！Duplicate Template from  https://tanghh.notion.site/02ab3b8678004aa69e9e415905ef32a5
   NOTION_PAGE_ID:
     process.env.NOTION_PAGE_ID ||
     '02ab3b8678004aa69e9e415905ef32a5,en:7c1d570661754c8fbc568e00a01fd70e',
-  THEME: process.env.NEXT_PUBLIC_THEME || 'simple', // 当前主题，在themes文件夹下可找到所有支持的主题；主题名称就是文件夹名，例如 claude,endspace,example,fukasawa,fuwari,gitbook,heo,hexo,landing,matery,medium,next,nobelium,plog,simple
+  THEME: CURRENT_THEME, // 当前主题，在themes文件夹下可找到所有支持的主题；主题名称就是文件夹名，例如 claude,endspace,example,fukasawa,fuwari,gitbook,heo,hexo,landing,matery,medium,next,nobelium,plog,quinsm,simple
   LANG: process.env.NEXT_PUBLIC_LANG || 'zh-CN', // e.g 'zh-CN','en-US'  see /lib/lang.js for more.
   SINCE: process.env.NEXT_PUBLIC_SINCE || 2021, // e.g if leave this empty, current year will be used.
 
@@ -36,6 +39,14 @@ const BLOG = {
   ...require('./conf/analytics.config'), // 站点访问统计
   ...require('./conf/image.config'), // 网站图片相关配置
   ...require('./conf/font.config'), // 网站字体
+  // quinsm 主题使用系统字体与主题自带图标字体，避免 SSR/首屏加载 Google Fonts、FontAwesome
+  FONT_URL: CURRENT_THEME === 'quinsm' ? [] : require('./conf/font.config').FONT_URL,
+  FONT_AWESOME: CURRENT_THEME === 'quinsm' ? '' : require('./conf/font.config').FONT_AWESOME,
+  // quinsm 主题使用原主题衬线字体，避免 Tailwind font-sans 切换造成布局偏移
+  FONT_STYLE: CURRENT_THEME === 'quinsm' ? '' : require('./conf/font.config').FONT_STYLE,
+  // quinsm 主题关闭主题切换器与调试面板，避免额外 DOM、图片和布局偏移
+  THEME_SWITCH: CURRENT_THEME === 'quinsm' ? false : require('./conf/widget.config').THEME_SWITCH,
+  DEBUG: CURRENT_THEME === 'quinsm' ? false : require('./conf/dev.config').DEBUG,
   ...require('./conf/right-click-menu'), // 自定义右键菜单相关配置
   ...require('./conf/code.config'), // 网站代码块样式
   ...require('./conf/animation.config'), // 动效美化效果
@@ -45,6 +56,12 @@ const BLOG = {
   ...require('./conf/ai.config'), // AI 相关配置（AI摘要、AI聊天机器人等）
   ...require('./conf/performance.config'), // 性能优化配置
   ...require('./conf/top-tag.config'), // 置顶文章全局配置
+
+  // quinsm 主题精简：关闭不蒜子 HTTP 统计、使用本地 Banner/头像，避免第三方 Cookie 与不安全请求
+  ANALYTICS_BUSUANZI_ENABLE: CURRENT_THEME === 'quinsm' ? false : require('./conf/analytics.config').ANALYTICS_BUSUANZI_ENABLE,
+  HOME_BANNER_IMAGE: CURRENT_THEME === 'quinsm' ? '/bg_image.webp' : undefined,
+  POST_TITLE_ICON: CURRENT_THEME === 'quinsm' ? false : require('./conf/post.config').POST_TITLE_ICON,
+  DISABLE_PLUGIN: CURRENT_THEME === 'quinsm' ? true : false,
 
   // 高级用法
   ...require('./conf/layout-map.config'), // 路由与布局映射自定义，例如自定义特定路由的页面布局

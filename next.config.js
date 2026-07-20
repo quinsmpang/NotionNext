@@ -437,7 +437,9 @@ const nextConfig = {
     // cpus: 1,
     scrollRestoration: true,
     // 性能优化实验性功能
-    optimizePackageImports: ['@heroicons/react', 'lodash']
+    optimizePackageImports: ['@heroicons/react', 'lodash'],
+    // 内联关键 CSS，剩余样式异步加载，减少移动端 render-blocking 导致的 LCP 延迟
+    optimizeCss: true
   },
   exportPathMap: function (
     defaultPathMap,

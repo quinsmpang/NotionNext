@@ -14,12 +14,16 @@ import { useCallback, useEffect, useMemo } from 'react'
 import { getQueryParam } from '../lib/utils'
 import ErrorHandler from '@/lib/utils/errorHandler'
 
-// 各种扩展插件 这个要阻塞引入
+// 各种扩展插件：按主题按需加载，quinsm 等精简主题下通过动态导入避免阻塞首屏 JS
 import BLOG from '@/blog.config'
-import ExternalPlugins from '@/components/ExternalPlugins'
 import SEO from '@/components/SEO'
+const ExternalPlugins = dynamic(
+  () => import('@/components/ExternalPlugins'),
+  { ssr: false }
+)
 import { zhCN } from '@clerk/localizations'
 import dynamic from 'next/dynamic'
+import Head from 'next/head'
 // import { ClerkProvider } from '@clerk/nextjs'
 const ClerkProvider = dynamic(() =>
   import('@clerk/nextjs').then(m => m.ClerkProvider)
@@ -45,16 +49,17 @@ const MyApp = ({ Component, pageProps }) => {
   const queryTheme = getQueryParam(route.asPath, 'theme')
   const notionTheme = pageProps?.NOTION_CONFIG?.THEME
   const configTheme = BLOG.THEME
+  // 本地 blog.config.js 配置优先于 Notion 云端配置，便于用户通过代码稳定切换主题
   const theme = useMemo(() => {
-    return queryTheme || notionTheme || configTheme
+    return queryTheme || configTheme || notionTheme
   }, [queryTheme, notionTheme, configTheme])
 
   useEffect(() => {
     const source = queryTheme
       ? 'url:theme'
-      : notionTheme
-        ? 'notion:config'
-        : 'blog/env:config'
+      : configTheme
+        ? 'blog/env:config'
+        : 'notion:config'
     console.log(
       '[ThemeResolver][runtime-final]',
       JSON.stringify(
@@ -84,6 +89,25 @@ const MyApp = ({ Component, pageProps }) => {
   const enableClerk = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
   const content = (
     <AppErrorBoundary>
+      {/* quinsm 主题样式通过独立 CSS 文件加载，避免内联大量样式影响性能 */}
+      {theme === 'quinsm' && (
+        <Head>
+          <link
+            rel='preload'
+            href='/quinsm/quinsm.min.css'
+            as='style'
+            fetchpriority='high'
+          />
+          <link rel='stylesheet' href='/quinsm/quinsm.min.css' />
+          <link
+            rel='preload'
+            href='/quinsm/fonts/pure-icon.woff'
+            as='font'
+            type='font/woff'
+            crossOrigin='anonymous'
+          />
+        </Head>
+      )}
       <GlobalContextProvider {...pageProps}>
         <GLayout {...pageProps}>
           <SEO {...pageProps} />

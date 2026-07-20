@@ -238,7 +238,18 @@ const adjustImgSize = (src, maxWidth) => {
   const wRegex = /w=\d+/
 
   // 使用正则表达式替换 width/w 参数
-  return src
+  let adjusted = src
     .replace(widthRegex, `width=${targetWidth}`)
     .replace(wRegex, `w=${targetWidth}`)
+
+  // 对 Notion 图片追加 WebP 格式参数，减少现代图片格式审计扣分
+  const isNotionImage =
+    adjusted.includes('www.notion.so/image') ||
+    adjusted.includes('prod-files-secure.s3.us-west-2.amazonaws.com')
+  if (isNotionImage && !adjusted.includes('format=webp')) {
+    const sep = adjusted.includes('?') ? '&' : '?'
+    adjusted = `${adjusted}${sep}format=webp`
+  }
+
+  return adjusted
 }

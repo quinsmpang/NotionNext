@@ -148,7 +148,7 @@ const ExternalPlugin = props => {
   }, [CUSTOM_EXTERNAL_JS])
 
   useEffect(() => {
-    if (!isBrowser) {
+    if (!isBrowser || DISABLE_PLUGIN) {
       return
     }
 

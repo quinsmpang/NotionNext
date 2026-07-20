@@ -685,6 +685,7 @@ const ThemeSwitch = () => {
               <button
                 type='button'
                 className='flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-gray-500 transition hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-white'
+                aria-label='关闭主题切换面板'
                 onClick={() => {
                   setSideBarVisible(false)
                 }}>
