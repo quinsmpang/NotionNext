@@ -9,13 +9,6 @@ export default function Header(props) {
   const { siteInfo } = props
   const { searchModal } = useQuinsmGlobal()
   const originalLogo = siteConfig('QUINSM_LOGO_IMG', null, CONFIG)
-  const isPngLogo = originalLogo.endsWith('.png')
-  const retinaLogo = isPngLogo
-    ? originalLogo.replace(/(@1x)?\.png$/, '@2x.png')
-    : ''
-  const logoSrcSet = retinaLogo
-    ? `${originalLogo} 1x, ${retinaLogo} 2x`
-    : undefined
 
   const handleSearch = () => {
     if (siteConfig('ALGOLIA_APP_ID')) {
@@ -33,7 +26,6 @@ export default function Header(props) {
             <a href='/' title={siteConfig('TITLE')}>
               <img
                 src={originalLogo}
-                srcSet={logoSrcSet}
                 alt={siteConfig('TITLE')}
                 decoding='async'
                 fetchpriority='high'

@@ -91,15 +91,15 @@ const Style = () => {
         text-decoration: underline;
       }
 
-      /* Logo 尺寸限制：适配 65px 高 metabar，保持清晰且不被压扁 */
+      /* Logo 尺寸：适配 65px 高 metabar，保持清晰且不被压扁 */
       #theme-quinsm .site-title a {
         display: inline-block;
         line-height: 65px;
       }
       #theme-quinsm .site-title img {
         display: inline-block;
-        max-width: 160px;
-        max-height: 40px;
+        max-width: 264px;
+        max-height: 65px;
         width: auto;
         height: auto;
         vertical-align: middle;
@@ -126,6 +126,19 @@ const Style = () => {
         #theme-quinsm .block-streamText .b-image {
           height: 140px;
         }
+      }
+
+      /* Utterances 评论区：适配容器宽度，避免居中错位 */
+      #theme-quinsm .utterances {
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100%;
+      }
+      #theme-quinsm .utterances-frame {
+        display: block;
+        width: 100%;
+        border: none;
       }
 
       /* 夜间模式简单兼容 */

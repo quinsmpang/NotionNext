@@ -9,7 +9,7 @@ const CONFIG = {
 
   QUINSM_LOGO_IMG:
     process.env.NEXT_PUBLIC_THEME_QUINSM_LOGO_IMG ||
-    '/quinsm/imgs/quinsmpang_logo@1x.png',
+    '/quinsm/imgs/quinsmpang_logo.png',
   QUINSM_AUTHOR_AVATAR:
     process.env.NEXT_PUBLIC_THEME_QUINSM_AUTHOR_AVATAR ||
     '/quinsm/icon/icon.jpeg',
