@@ -10,7 +10,9 @@ export default function Header(props) {
   const { searchModal } = useQuinsmGlobal()
   const originalLogo = siteConfig('QUINSM_LOGO_IMG', null, CONFIG)
   const isPngLogo = originalLogo.endsWith('.png')
-  const retinaLogo = isPngLogo ? originalLogo.replace(/\.png$/, '@2x.png') : ''
+  const retinaLogo = isPngLogo
+    ? originalLogo.replace(/(@1x)?\.png$/, '@2x.png')
+    : ''
   const logoSrcSet = retinaLogo
     ? `${originalLogo} 1x, ${retinaLogo} 2x`
     : undefined

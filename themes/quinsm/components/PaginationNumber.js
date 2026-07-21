@@ -6,8 +6,13 @@ import { useGlobal } from '@/lib/global'
 export default function PaginationNumber({ page, totalPage }) {
   const { locale } = useGlobal()
   const currentPage = page || 1
+  const total = totalPage || 1
   const hasPrev = currentPage > 1
-  const hasNext = currentPage < totalPage
+  const hasNext = currentPage < total
+
+  if (total <= 1) {
+    return null
+  }
 
   return (
     <nav className='v-textAlignCenter fontSmooth posts-load-btn'>
@@ -16,17 +21,21 @@ export default function PaginationNumber({ page, totalPage }) {
           {locale.PAGINATION.PREV || '上一页'}
         </a>
       ) : (
-        <span className='posts-load-disabled'>{locale.PAGINATION.PREV || '上一页'}</span>
+        <span className='posts-load-disabled'>
+          {locale.PAGINATION.PREV || '上一页'}
+        </span>
       )}
       <span className='posts-load-num'>
-        {currentPage} / {totalPage || 1}
+        {currentPage} / {total}
       </span>
       {hasNext ? (
         <a className='posts-load-prompt' href={`/page/${currentPage + 1}`}>
           {locale.PAGINATION.NEXT || '下一页'}
         </a>
       ) : (
-        <span className='posts-load-disabled'>{locale.PAGINATION.NEXT || '下一页'}</span>
+        <span className='posts-load-disabled'>
+          {locale.PAGINATION.NEXT || '下一页'}
+        </span>
       )}
     </nav>
   )

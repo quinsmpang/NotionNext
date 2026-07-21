@@ -1,4 +1,5 @@
 import { siteConfig } from '@/lib/config'
+import CONFIG from '../config'
 
 /**
  * 页脚
@@ -9,6 +10,12 @@ export default function Footer() {
   const since = siteConfig('SINCE')
   const copyrightDate =
     parseInt(since) < currentYear ? since + '-' + currentYear : currentYear
+  const footerText =
+    siteConfig('QUINSM_FOOTER_TEXT', null, CONFIG) ||
+    `${siteConfig('TITLE')} with <span class="cute iconfont icon-heart"></span>`
+  const footerCopyright =
+    siteConfig('QUINSM_FOOTER_COPYRIGHT', null, CONFIG) ||
+    `&copy;${copyrightDate} ${siteConfig('AUTHOR')}. All rights reserved.`
 
   return (
     <footer
@@ -17,16 +24,8 @@ export default function Footer() {
       role='contentinfo'
     >
       <div className='site-info fontSmooth'>
-        <p>
-          <a href='/' title={siteConfig('TITLE')}>
-            {siteConfig('TITLE')}
-          </a>{' '}
-          with <span className='cute iconfont icon-heart'></span>
-        </p>
-        <p>
-          &copy;{`${copyrightDate}`} {siteConfig('AUTHOR')}. All rights
-          reserved.
-        </p>
+        <p dangerouslySetInnerHTML={{ __html: footerText }} />
+        <p dangerouslySetInnerHTML={{ __html: footerCopyright }} />
       </div>
     </footer>
   )

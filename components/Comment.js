@@ -92,6 +92,18 @@ const Comment = ({ frontMatter, className }) => {
     return null
   }
 
+  const hasCommentProvider =
+    COMMENT_ARTALK_SERVER ||
+    COMMENT_TWIKOO_ENV_ID ||
+    COMMENT_WALINE_SERVER_URL ||
+    COMMENT_VALINE_APP_ID ||
+    COMMENT_GISCUS_REPO ||
+    COMMENT_CUSDIS_APP_ID ||
+    COMMENT_UTTERRANCES_REPO ||
+    COMMENT_GITALK_CLIENT_ID ||
+    COMMENT_WEBMENTION_ENABLE ||
+    COMMENT_NOTION_ENABLE
+
   return (
     <div
       key={frontMatter?.id}
@@ -107,7 +119,7 @@ const Comment = ({ frontMatter, className }) => {
         </div>
       )}
 
-      {shouldLoad && (
+      {shouldLoad && hasCommentProvider && (
         <Tabs>
           {COMMENT_ARTALK_SERVER && (
             <div key='Artalk'>
@@ -172,6 +184,12 @@ const Comment = ({ frontMatter, className }) => {
             </div>
           )}
         </Tabs>
+      )}
+
+      {shouldLoad && !hasCommentProvider && (
+        <div className='text-center text-gray-500 py-4 text-sm'>
+          评论功能尚未配置，请在 blog.config.js 或环境变量中设置评论服务。
+        </div>
       )}
     </div>
   )

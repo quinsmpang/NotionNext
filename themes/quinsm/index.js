@@ -238,9 +238,9 @@ const LayoutSlug = props => {
                     }}
                   />
                 </div>
-                {post?.publishDate && (
+                {post?.publishDay && (
                   <div className='post--time' itemProp='datePublished'>
-                    发表于 {post.publishDate}
+                    发表于 {post.publishDay}
                   </div>
                 )}
               </div>

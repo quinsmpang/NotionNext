@@ -91,11 +91,18 @@ const Style = () => {
         text-decoration: underline;
       }
 
-      /* Logo 由图片自身决定尺寸，避免被 Tailwind 或其他样式压扁 */
+      /* Logo 尺寸限制：适配 65px 高 metabar，保持清晰且不被压扁 */
+      #theme-quinsm .site-title a {
+        display: inline-block;
+        line-height: 65px;
+      }
       #theme-quinsm .site-title img {
-        display: block;
-        max-width: 100%;
+        display: inline-block;
+        max-width: 160px;
+        max-height: 40px;
+        width: auto;
         height: auto;
+        vertical-align: middle;
       }
 
       /* 首页文章列表：恢复旧主题 link 高亮 */

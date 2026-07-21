@@ -5,7 +5,7 @@ import { siteConfig } from '@/lib/config'
  */
 export default function ArticleInfo({ post }) {
   const publishDate =
-    post?.publishDate || post?.date?.start_date || post?.createdTime
+    post?.publishDay || post?.date?.start_date || post?.createdTime
   return (
     <header className='entry-header'>
       <h1 className='entry-title fontSmooth' itemProp='headline'>
