@@ -1,6 +1,7 @@
+import LazyImage from '@/components/LazyImage'
 import { siteConfig } from '@/lib/config'
 import { useGlobal } from '@/lib/global'
-import { toWebp } from '../lib/toWebp'
+import CONFIG from '../config'
 
 /**
  * 首页文章列表项（严格对齐旧主题 Pure 三段式结构）
@@ -10,9 +11,8 @@ export default function BlogItem(props) {
   const { locale } = useGlobal()
   const accessibleTitle = post.title || post.summary || post.slug || 'Untitled'
   const publishTime = post.date?.start_date || post.createdTime
-  const coverImage = post?.pageCoverThumbnail
-    ? toWebp(post.pageCoverThumbnail)
-    : null
+  const showCover = siteConfig('QUINSM_POST_COVER_ENABLE', true, CONFIG)
+  const coverImage = showCover ? post?.pageCoverThumbnail : null
 
   return (
     <article
@@ -43,8 +43,11 @@ export default function BlogItem(props) {
       <div className='block-streamText'>
         {coverImage && (
           <a href={post.href} aria-label={accessibleTitle}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className='b-image' src={coverImage} alt={accessibleTitle} />
+            <LazyImage
+              src={coverImage}
+              alt={accessibleTitle}
+              className='b-image'
+            />
           </a>
         )}
         <h2 className='block-title' itemProp='headline'>
