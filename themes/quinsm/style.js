@@ -107,6 +107,20 @@ const Style = () => {
         color: #f3a500;
       }
 
+      /* 首页文章首图横幅：旧主题 timthumb 裁剪为 700×210 */
+      #theme-quinsm .block-streamText .b-image {
+        display: block;
+        width: 100%;
+        height: 210px;
+        object-fit: cover;
+        padding-top: 16px;
+      }
+      @media screen and (max-width: 640px) {
+        #theme-quinsm .block-streamText .b-image {
+          height: 140px;
+        }
+      }
+
       /* 夜间模式简单兼容 */
       .dark #theme-quinsm {
         background-color: #1a1a1a;
