@@ -1,4 +1,3 @@
-import LazyImage from '@/components/LazyImage'
 import { siteConfig } from '@/lib/config'
 import { useGlobal } from '@/lib/global'
 import CONFIG from '../config'
@@ -43,11 +42,8 @@ export default function BlogItem(props) {
       <div className='block-streamText'>
         {coverImage && (
           <a href={post.href} aria-label={accessibleTitle}>
-            <LazyImage
-              src={coverImage}
-              alt={accessibleTitle}
-              className='b-image'
-            />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className='b-image' src={coverImage} alt={accessibleTitle} />
           </a>
         )}
         <h2 className='block-title' itemProp='headline'>
