@@ -128,17 +128,190 @@ const Style = () => {
         }
       }
 
-      /* Utterances 评论区：适配容器宽度，避免居中错位 */
-      #theme-quinsm .utterances {
-        max-width: 100% !important;
-        margin-left: 0 !important;
-        margin-right: 0 !important;
-        width: 100%;
+      /* ========== 自建评论系统：暗色模式 & 表情 & 表单适配 ========== */
+
+      /* 评论空状态 */
+      #theme-quinsm .comment-nav-empty {
+        padding: 30px 0;
+        color: rgba(0, 0, 0, 0.45);
       }
-      #theme-quinsm .utterances-frame {
+      .dark #theme-quinsm .comment-nav-empty {
+        color: rgba(255, 255, 255, 0.35);
+      }
+
+      /* 评论区暗色适配 */
+      .dark #theme-quinsm .comment-block {
+        border-bottom-color: rgba(255, 255, 255, 0.08);
+      }
+      .dark #theme-quinsm .comment-content {
+        color: rgba(255, 255, 255, 0.8);
+      }
+      .dark #theme-quinsm .comment-meta .name {
+        color: rgba(255, 255, 255, 0.9);
+      }
+      .dark #theme-quinsm .comment-meta .time {
+        color: rgba(255, 255, 255, 0.5);
+      }
+      .dark #theme-quinsm .comment-form-input label {
+        background: #1a1a1a;
+        color: rgba(255, 255, 255, 0.65);
+      }
+      .dark #theme-quinsm .comment-form-input input,
+      .dark #theme-quinsm #comment {
+        color: rgba(255, 255, 255, 0.85);
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.2);
+      }
+      .dark #theme-quinsm #submit,
+      .dark #theme-quinsm #cancel-comment-reply-link {
+        background: transparent;
+        color: #f3a500;
+        border-color: #f3a500;
+      }
+      .dark #theme-quinsm .commentNavTabs {
+        border-top-color: rgba(255, 255, 255, 0.1);
+      }
+      .dark #theme-quinsm .commentNavTabs-item.is-active {
+        border-top-color: rgba(255, 255, 255, 0.6);
+        color: rgba(255, 255, 255, 0.85);
+      }
+      .dark #theme-quinsm .buttton--commentmore {
+        color: rgba(255, 255, 255, 0.5);
+      }
+      .dark #theme-quinsm .buttton--commentmore:hover {
+        color: #f3a500;
+      }
+
+      /* 表情选择器容器 */
+      #theme-quinsm .comment-form-smilies {
+        margin-bottom: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2px;
+      }
+
+      /* 阿鲁表情：渲染后的 img 和选择器中的 img */
+      #theme-quinsm img.alu-emoji {
+        width: 24px !important;
+        height: auto !important;
+        max-height: none !important;
+        display: inline;
+        vertical-align: middle;
+        margin: 0 1px;
+      }
+      .dark #theme-quinsm img.alu-emoji {
+        opacity: 0.9;
+      }
+      #theme-quinsm .add-smily {
+        cursor: pointer;
+        display: inline-block;
+        margin: 2px;
+        padding: 2px;
+        border-radius: 3px;
+        border: 1px solid transparent;
+        background: transparent;
+        transition: transform 0.15s ease, border-color 0.15s ease;
+      }
+      #theme-quinsm .add-smily:hover {
+        transform: scale(1.2);
+        border-color: rgba(243, 165, 0, 0.4);
+      }
+      #theme-quinsm img.wp-smiley {
+        width: 24px !important;
+        height: auto !important;
+        max-height: none !important;
         display: block;
-        width: 100%;
-        border: none;
+      }
+      .dark #theme-quinsm img.wp-smiley {
+        opacity: 0.85;
+      }
+
+      /* 回复提示条 */
+      #theme-quinsm .comments-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      /* 通知条 */
+      #theme-quinsm .comment-notice {
+        padding: 10px 15px;
+        margin-bottom: 15px;
+        font-size: 13px;
+        border-radius: 3px;
+        display: flex;
+        align-items: center;
+      }
+      #theme-quinsm .comment-notice--success {
+        background: #f0f9eb;
+        border: 1px solid #e1f3d8;
+        color: #67c23a;
+      }
+      #theme-quinsm .comment-notice--error {
+        background: #fef0f0;
+        border: 1px solid #fde2e2;
+        color: #f56c6c;
+      }
+      #theme-quinsm .comment-notice--info {
+        background: #f5f5f5;
+        border: 1px solid #e8e8e8;
+        color: rgba(0, 0, 0, 0.65);
+      }
+      .dark #theme-quinsm .comment-notice--success {
+        background: rgba(103, 194, 58, 0.1);
+        border-color: rgba(103, 194, 58, 0.2);
+      }
+      .dark #theme-quinsm .comment-notice--error {
+        background: rgba(245, 108, 108, 0.1);
+        border-color: rgba(245, 108, 108, 0.2);
+      }
+      .dark #theme-quinsm .comment-notice--info {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.55);
+      }
+
+      /* 评论回复切换按钮 */
+      #theme-quinsm .comment-reply-toggle {
+        margin-top: 4px;
+      }
+      #theme-quinsm .comment-reply-link {
+        display: inline-block;
+        cursor: pointer;
+      }
+      #theme-quinsm .comment-reply-link .iconfont {
+        margin-right: 2px;
+      }
+
+      /* 评论加载骨架屏 */
+      #theme-quinsm .comment-skeleton-list {
+        margin: 15px 0;
+      }
+      #theme-quinsm .comment-skeleton {
+        height: 80px;
+        margin-bottom: 15px;
+        background: linear-gradient(
+          90deg,
+          rgba(0, 0, 0, 0.04) 25%,
+          rgba(0, 0, 0, 0.08) 50%,
+          rgba(0, 0, 0, 0.04) 75%
+        );
+        background-size: 200% 100%;
+        animation: quinsm-comment-skeleton 1.5s ease-in-out infinite;
+        border-radius: 4px;
+      }
+      @keyframes quinsm-comment-skeleton {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+      }
+      .dark #theme-quinsm .comment-skeleton {
+        background: linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0.03) 25%,
+          rgba(255, 255, 255, 0.07) 50%,
+          rgba(255, 255, 255, 0.03) 75%
+        );
+        background-size: 200% 100%;
       }
 
       /* 夜间模式简单兼容 */

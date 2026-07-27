@@ -1,8 +1,14 @@
 import BLOG from '@/blog.config'
-import Comment from '@/components/Comment'
 import { siteConfig } from '@/lib/config'
 import { fetchGlobalAllData } from '@/lib/db/SiteDataApi'
 import { DynamicLayout } from '@/themes/theme'
+import dynamic from 'next/dynamic'
+
+const QuinsmComments = dynamic(
+  () => import('@/themes/quinsm/components/QuinsmComments'),
+  { ssr: false }
+)
+const Comment = dynamic(() => import('@/components/Comment'), { ssr: false })
 
 /**
  * 独立留言板页面
@@ -11,6 +17,7 @@ import { DynamicLayout } from '@/themes/theme'
  */
 const Guestbook = props => {
   const theme = siteConfig('THEME', BLOG.THEME, props.NOTION_CONFIG)
+  const isQuinsm = theme === 'quinsm'
   const frontMatter = {
     id: 'guestbook',
     slug: 'guestbook',
@@ -28,7 +35,11 @@ const Guestbook = props => {
           <p className='block-snippet block-snippet--subtitle'>
             欢迎留下你的想法、建议或问题，我会尽快回复。
           </p>
-          <Comment frontMatter={frontMatter} />
+          {isQuinsm ? (
+            <QuinsmComments postId='guestbook' />
+          ) : (
+            <Comment frontMatter={frontMatter} />
+          )}
         </div>
       </div>
     </DynamicLayout>

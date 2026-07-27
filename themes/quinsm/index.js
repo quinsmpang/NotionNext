@@ -25,7 +25,7 @@ const ArticleLock = dynamic(() => import('./components/ArticleLock'), {
   ssr: false
 })
 import ArticleInfo from './components/ArticleInfo'
-const Comment = dynamic(() => import('@/components/Comment'), { ssr: false })
+const QuinsmComments = dynamic(() => import('./components/QuinsmComments'), { ssr: false })
 const ArticleAround = dynamic(() => import('./components/ArticleAround'), {
   ssr: false
 })
@@ -214,7 +214,7 @@ const LayoutSlug = props => {
                   <RecommendPosts recommendPosts={recommendPosts} />
                 </>
               )}
-              <Comment frontMatter={post} />
+              <QuinsmComments postId={post.id} />
             </article>
           </div>
           <div className='layoutSingleColumn--sidebar'>

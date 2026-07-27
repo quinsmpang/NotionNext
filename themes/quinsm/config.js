@@ -29,6 +29,12 @@ const CONFIG = {
   QUINSM_SIDEBAR_HOT_POSTS: true,
   QUINSM_SIDEBAR_TAGS: true,
 
+  // 自建评论（quinsm + Notion + 阿鲁表情）
+  QUINSM_COMMENT_ENABLE:
+    process.env.NEXT_PUBLIC_THEME_QUINSM_COMMENT_ENABLE !== 'false',
+  QUINSM_COMMENT_EMOJI_ENABLE:
+    process.env.NEXT_PUBLIC_THEME_QUINSM_COMMENT_EMOJI_ENABLE !== 'false',
+
   // 文章底部提示
   QUINSM_POST_BOTTOM_NOTICE:
     '如对文章内容有疑问请在文章下或者<a href="/guestbook" class="cute">留言板</a>留言。',
