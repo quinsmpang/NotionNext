@@ -335,6 +335,17 @@ const Style = () => {
         background: rgba(30, 30, 30, 0.97);
         box-shadow: 0 0 1px rgba(255, 255, 255, 0.1);
       }
+
+      /* Header 固定定位时，内容区留出 65px 偏移避免被遮挡 */
+      #theme-quinsm .surface-container {
+        padding-top: 65px;
+      }
+      @media screen and (max-width: 640px) {
+        #theme-quinsm .surface-container {
+          padding-top: 55px;
+        }
+      }
+
       .dark #theme-quinsm .site-title img {
         filter: invert(0.9);
       }
