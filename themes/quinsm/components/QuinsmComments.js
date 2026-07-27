@@ -103,7 +103,17 @@ export default function QuinsmComments({ postId }) {
       response = await fetch(
         `/api/notion-comments?postId=${encodeURIComponent(postId)}`
       )
-      if (!response.ok) throw new Error('Failed to load comments')
+      if (!response.ok) {
+        // 尝试读取服务端返回的详细错误
+        let detail = ''
+        try {
+          const body = await response.json()
+          detail = body.error || ''
+        } catch (_) { /* ignore */ }
+        throw new Error(
+          detail || `HTTP ${response.status}: 请求失败`
+        )
+      }
       const data = await response.json()
       if (Array.isArray(data)) {
         setComments(data)
@@ -118,7 +128,7 @@ export default function QuinsmComments({ postId }) {
       ) {
         setApiAvailable(false)
       } else {
-        setError('评论加载失败，请重试')
+        setError(err.message || '评论加载失败，请重试')
       }
     } finally {
       setLoading(false)
@@ -425,10 +435,10 @@ export default function QuinsmComments({ postId }) {
           <details style={{ marginTop: '10px', fontSize: '12px', color: 'rgba(0,0,0,0.5)' }}>
             <summary style={{ cursor: 'pointer' }}>排查指引</summary>
             <ul style={{ marginTop: '6px', paddingLeft: '16px', lineHeight: '1.8' }}>
-              <li>确认 Vercel 环境变量中已设置 <code>NOTION_TOKEN</code>、<code>NOTION_COMMENT_DATABASE_ID</code>、<code>NEXT_PUBLIC_COMMENT_NOTION_ENABLE=true</code></li>
-              <li>确认评论数据库已共享给 Integration（数据库页面 → 右上角 ... → 连接）</li>
-              <li>确认数据库字段名与文档一致（PostId / Content / Author 等）</li>
-              <li>修改环境变量后需要重新部署才会生效</li>
+              <li>Vercel 环境变量中是否已设置 <code>NOTION_TOKEN</code>（以 <code>secret_</code> 开头）、<code>NOTION_COMMENT_DATABASE_ID</code>（32位）、<code>NEXT_PUBLIC_COMMENT_NOTION_ENABLE=true</code></li>
+              <li>数据库是否已共享给 Integration（数据库页面 → 右上角 ... → 连接 → 添加你的 Integration）</li>
+              <li>修改环境变量后是否已点 <b>Redeploy</b> 重新部署</li>
+              <li>在 Vercel Dashboard → Functions 日志中搜索 <code>notion-comments</code> 查看具体错误</li>
             </ul>
           </details>
         </div>
