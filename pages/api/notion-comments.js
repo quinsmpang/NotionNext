@@ -106,7 +106,7 @@ export default async function handler(req, res) {
       return res.status(200).json(await fetchComments(postId))
     } catch (error) {
       console.error('Failed to fetch Notion comments:', error)
-      return res.status(500).json({ error: 'Failed to fetch comments' })
+      return res.status(500).json({ error: `Notion API: ${error.message || 'Failed to fetch comments'}` })
     }
   }
 
@@ -180,6 +180,6 @@ export default async function handler(req, res) {
     })
   } catch (error) {
     console.error('Failed to create Notion comment:', error)
-    return res.status(500).json({ error: 'Failed to create comment' })
+    return res.status(500).json({ error: `Notion API: ${error.message || 'Failed to create comment'}` })
   }
 }
