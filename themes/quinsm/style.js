@@ -337,6 +337,9 @@ const Style = () => {
       }
 
       /* Header 固定定位时，内容区留出 65px 偏移避免被遮挡 */
+      #theme-quinsm .metabar {
+        overflow: hidden;
+      }
       #theme-quinsm .surface-container {
         padding-top: 65px;
       }
