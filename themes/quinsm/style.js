@@ -336,9 +336,10 @@ const Style = () => {
         box-shadow: 0 0 1px rgba(255, 255, 255, 0.1);
       }
 
-      /* Header 固定定位时，内容区留出 65px 偏移避免被遮挡 */
+      /* Header 固定定位：白色背景 + 防止 Logo 溢出 */
       #theme-quinsm .metabar {
         overflow: hidden;
+        background: #fff;
       }
       #theme-quinsm .surface-container {
         padding-top: 65px;
