@@ -314,6 +314,12 @@ const Style = () => {
         background-size: 200% 100%;
       }
 
+      /* 配置提示暗色 */
+      .dark #theme-quinsm .comment-notice code {
+        background: rgba(255, 255, 255, 0.08);
+        color: rgba(255, 255, 255, 0.75);
+      }
+
       /* 夜间模式简单兼容 */
       .dark #theme-quinsm {
         background-color: #1a1a1a;
