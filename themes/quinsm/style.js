@@ -314,10 +314,16 @@ const Style = () => {
         background-size: 200% 100%;
       }
 
-      /* 配置提示暗色 */
+      /* 配置提示 / 排查指引暗色 */
       .dark #theme-quinsm .comment-notice code {
         background: rgba(255, 255, 255, 0.08);
         color: rgba(255, 255, 255, 0.75);
+      }
+      .dark #theme-quinsm .comment-notice details {
+        color: rgba(255, 255, 255, 0.5);
+      }
+      .dark #theme-quinsm .comment-notice details summary {
+        color: rgba(255, 255, 255, 0.65);
       }
 
       /* 夜间模式简单兼容 */

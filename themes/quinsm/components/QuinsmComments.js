@@ -64,7 +64,6 @@ export default function QuinsmComments({ postId }) {
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [apiAvailable, setApiAvailable] = useState(true)
-  const [apiConfigured, setApiConfigured] = useState(true)
   const contentRef = useRef(null)
   const commentRef = useRef(null)
 
@@ -110,18 +109,14 @@ export default function QuinsmComments({ postId }) {
         setComments(data)
       }
       setApiAvailable(true)
-      setApiConfigured(true)
     } catch (err) {
-      // TypeError: 网络不通（静态模式 / API 路由不可达）
+      // TypeError: 网络不通（静态导出模式）
       // 404:      API 路由不存在（静态导出）
-      // 500:      服务端错误（多半是未配置 NOTION_TOKEN / NOTION_COMMENT_DATABASE_ID）
       if (
         err instanceof TypeError ||
         (response && response.status === 404)
       ) {
         setApiAvailable(false)
-      } else if (response && response.status >= 500) {
-        setApiConfigured(false)
       } else {
         setError('评论加载失败，请重试')
       }
@@ -171,7 +166,6 @@ export default function QuinsmComments({ postId }) {
       setNotice(
         result.pending ? '评论已提交，审核通过后显示。' : '评论已发布。'
       )
-      setApiConfigured(true)
       if (replyTo) {
         setExpandedReplies(current => ({ ...current, [replyTo]: true }))
         setVisibleReplyCounts(current => ({
@@ -182,10 +176,6 @@ export default function QuinsmComments({ postId }) {
       await loadComments()
     } catch (err) {
       setError(err.message || '评论提交失败，请稍后重试')
-      // 500 错误大概率是服务端未配置
-      if (err.message && err.message.includes('Failed to create')) {
-        setApiConfigured(false)
-      }
     } finally {
       setSubmitting(false)
     }
@@ -340,43 +330,6 @@ export default function QuinsmComments({ postId }) {
     )
   }
 
-  // API 未配置（缺少 NOTION_TOKEN / NOTION_COMMENT_DATABASE_ID）
-  if (shouldLoad && !apiConfigured && apiAvailable && !loading) {
-    return (
-      <div id='quinsm-comments' ref={commentRef} className='comments-area fontSmooth'>
-        <div className='comment-notice comment-notice--info' style={{ display: 'block' }}>
-          <p style={{ marginBottom: '8px', fontWeight: 'bold' }}>
-            评论服务未配置
-          </p>
-          <p style={{ marginBottom: '4px', fontSize: '13px' }}>
-            请在部署环境变量中添加以下配置后重新部署：
-          </p>
-          <code style={{
-            display: 'block',
-            background: 'rgba(0,0,0,0.05)',
-            padding: '10px 14px',
-            fontSize: '12px',
-            lineHeight: '1.8',
-            borderRadius: '4px',
-            marginTop: '6px',
-            wordBreak: 'break-all'
-          }}>
-            NEXT_PUBLIC_COMMENT_NOTION_ENABLE=true<br />
-            NOTION_COMMENT_DATABASE_ID=你的数据库ID<br />
-            NOTION_TOKEN=secret_xxx
-          </code>
-          <p style={{ marginTop: '8px', fontSize: '13px' }}>
-            配置方法详见{' '}
-            <Link href='/guestbook' className='cute'>
-              留言板
-            </Link>
-            {' '}页面说明。
-          </p>
-        </div>
-      </div>
-    )
-  }
-
   // 静态导出模式提示
   if (shouldLoad && !apiAvailable && !loading) {
     return (
@@ -458,8 +411,27 @@ export default function QuinsmComments({ postId }) {
       {notice && (
         <div className='comment-notice comment-notice--success'>{notice}</div>
       )}
-      {error && comments.length > 0 && (
-        <div className='comment-notice comment-notice--error'>{error}</div>
+      {error && (
+        <div className='comment-notice comment-notice--error' style={{ display: 'block' }}>
+          <p style={{ marginBottom: '8px' }}>{error}</p>
+          <button
+            type='button'
+            className='button button--chromeless'
+            style={{ textDecoration: 'underline', fontSize: '12px' }}
+            onClick={() => { void loadComments() }}
+          >
+            点击重试
+          </button>
+          <details style={{ marginTop: '10px', fontSize: '12px', color: 'rgba(0,0,0,0.5)' }}>
+            <summary style={{ cursor: 'pointer' }}>排查指引</summary>
+            <ul style={{ marginTop: '6px', paddingLeft: '16px', lineHeight: '1.8' }}>
+              <li>确认 Vercel 环境变量中已设置 <code>NOTION_TOKEN</code>、<code>NOTION_COMMENT_DATABASE_ID</code>、<code>NEXT_PUBLIC_COMMENT_NOTION_ENABLE=true</code></li>
+              <li>确认评论数据库已共享给 Integration（数据库页面 → 右上角 ... → 连接）</li>
+              <li>确认数据库字段名与文档一致（PostId / Content / Author 等）</li>
+              <li>修改环境变量后需要重新部署才会生效</li>
+            </ul>
+          </details>
+        </div>
       )}
 
       {/* ---- 评论表单 ---- */}
