@@ -214,7 +214,7 @@ const LayoutSlug = props => {
                   <RecommendPosts recommendPosts={recommendPosts} />
                 </>
               )}
-              <QuinsmComments postId={post.id} />
+              <QuinsmComments postId={post?.id} />
             </article>
           </div>
           <div className='layoutSingleColumn--sidebar'>

@@ -88,8 +88,8 @@ function escapeRegex(str) {
  */
 export function convertTextToEmoji(text) {
   if (!text) return ''
-  // 先对 HTML 特殊字符转义
-  let result = text
+  // 确保输入为字符串并转义 HTML 特殊字符
+  let result = String(text)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')

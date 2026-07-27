@@ -318,6 +318,15 @@ export default function QuinsmComments({ postId }) {
     )
   }
 
+  // 缺少 postId 时不渲染评论区
+  if (!postId) {
+    return (
+      <div id='quinsm-comments' ref={commentRef} className='comments-area fontSmooth'>
+        <div style={{ height: '80px' }} />
+      </div>
+    )
+  }
+
   // 静态导出模式提示
   if (shouldLoad && !apiAvailable && !loading) {
     return (
