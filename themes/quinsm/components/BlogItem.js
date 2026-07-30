@@ -15,54 +15,56 @@ export default function BlogItem(props) {
 
   return (
     <article
-      className='block block--inset block--list'
+      className={`block block--inset block--list homePost${coverImage ? '' : ' homePost--withoutCover'}`}
       itemType='http://schema.org/Article'
       itemScope='itemscope'
     >
-      {/* 顶部作者/时间元信息 */}
-      <div className='block-postMeta v-overflowHidden'>
-        <div className='v-alignLeft'>
-          <div className='postMetaInline-feedSummary'>
-            <a
-              className='link link--accent link--darken'
-              href='/'
-              title={`Go to the profile of ${siteConfig('AUTHOR')}`}
-            >
-              {siteConfig('AUTHOR')}
+      {coverImage && (
+        <a
+          className='homePost-cover'
+          href={post.href}
+          aria-label={accessibleTitle}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className='b-image' src={coverImage} alt={accessibleTitle} />
+        </a>
+      )}
+      <div className='homePost-body'>
+        <div className='block-postMeta'>
+          <time dateTime={post.date?.start_date || undefined}>
+            {publishTime}
+          </time>
+          {post.category && (
+            <>
+              <span className='homePost-metaDivider' aria-hidden='true'>
+                /
+              </span>
+              <a href={`/category/${encodeURIComponent(post.category)}`}>
+                {post.category}
+              </a>
+            </>
+          )}
+        </div>
+        <div className='block-streamText'>
+          <h2 className='block-title' itemProp='headline'>
+            <a href={post.href} aria-label={accessibleTitle}>
+              {accessibleTitle}
             </a>
-            <span className='postMetaInline postMetaInline--supplemental'>
-              {publishTime}
-            </span>
-          </div>
+          </h2>
+          {post.summary && (
+            <div
+              className='block-snippet block-snippet--subtitle'
+              itemProp='about'
+            >
+              {post.summary}
+            </div>
+          )}
         </div>
-        <div className='v-alignRight'></div>
-      </div>
-
-      {/* 标题与摘要：旧主题把文章首图放在标题上方 */}
-      <div className='block-streamText'>
-        {coverImage && (
-          <a href={post.href} aria-label={accessibleTitle}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className='b-image' src={coverImage} alt={accessibleTitle} />
-          </a>
-        )}
-        <h2 className='block-title' itemProp='headline'>
-          <a href={post.href} aria-label={accessibleTitle}>
-            {accessibleTitle}
-          </a>
-        </h2>
-        <div className='block-snippet block-snippet--subtitle' itemProp='about'>
-          {post.summary}
-        </div>
-      </div>
-
-      {/* 底部阅读更多 */}
-      <div className='block-postMeta postMeta-previewFooter'>
-        <div className='v-alignLeft'>
+        <div className='block-postMeta postMeta-previewFooter'>
           <a className='link link--accent cute' href={post.href}>
             {locale.COMMON.READ_MORE || 'Continue reading'}
+            <span aria-hidden='true'> →</span>
           </a>
-          <span className='middotDivider'></span>
         </div>
       </div>
     </article>

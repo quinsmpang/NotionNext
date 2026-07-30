@@ -17,25 +17,41 @@ const Style = () => {
 
       /* 内容页标题与元信息 */
       #theme-quinsm .entry-header {
-        margin-bottom: 1.5rem;
+        margin-bottom: 1.75rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
       }
       #theme-quinsm .entry-title {
-        font-size: 1.875rem;
-        line-height: 1.35;
+        font-size: clamp(1.8rem, 4vw, 2.2rem);
+        line-height: 1.28;
         font-weight: 700;
-        margin-bottom: 0.5rem;
+        letter-spacing: -0.025em;
+        margin-bottom: 0.65rem;
         color: inherit;
       }
       #theme-quinsm .entry-meta {
-        font-size: 0.875rem;
-        color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-size: 0.8125rem;
+        line-height: 1.5;
+        color: rgba(0, 0, 0, 0.48);
       }
       #theme-quinsm .entry-meta a {
         color: inherit;
-        text-decoration: underline;
+        text-decoration: none;
+      }
+      #theme-quinsm .entry-meta a:hover {
+        color: #f3a500;
+      }
+      #theme-quinsm .entry-metaDivider {
+        color: rgba(0, 0, 0, 0.22);
       }
 
-      /* Notion 正文可读性优化 */
+      /* 内容页：保持舒展阅读宽度，同时收紧段落与标题节奏 */
+      #theme-quinsm .postArticle {
+        padding-top: 38px;
+      }
       #theme-quinsm #notion-article {
         overflow: visible !important;
         width: 100%;
@@ -46,19 +62,51 @@ const Style = () => {
       }
       #theme-quinsm .notion {
         font-size: 16px;
-        line-height: 1.8;
-        color: rgba(0, 0, 0, 0.8);
+        line-height: 1.72;
+        color: rgba(0, 0, 0, 0.78);
       }
       #theme-quinsm .notion-text {
-        margin-bottom: 0.75em;
+        margin: 0 0 0.65em;
       }
       #theme-quinsm .notion-h {
-        font-family: Georgia, 'Times New Roman', serif;
+        font-family: inherit;
+        color: rgba(0, 0, 0, 0.88);
+        letter-spacing: -0.015em;
+      }
+      #theme-quinsm .notion-h1,
+      #theme-quinsm .notion-h2 {
+        margin-top: 1.9em;
+        margin-bottom: 0.65em;
+      }
+      #theme-quinsm .notion-h3 {
+        margin-top: 1.55em;
+        margin-bottom: 0.55em;
+      }
+      #theme-quinsm .notion-list {
+        margin-block: 0.25em;
+      }
+      #theme-quinsm .notion-quote {
+        margin: 1rem 0;
+        padding: 0.7rem 1rem;
+        border-left: 3px solid #f3a500;
+        background: rgba(243, 165, 0, 0.055);
+        color: rgba(0, 0, 0, 0.68);
+      }
+      #theme-quinsm .notion-callout {
+        margin: 1rem 0;
+        border-radius: 8px;
       }
       #theme-quinsm .notion-asset-wrapper img,
       #theme-quinsm .notion-asset-wrapper iframe {
         max-width: 100%;
         height: auto;
+      }
+      #theme-quinsm .notion-asset-wrapper img {
+        border-radius: 8px;
+      }
+      #theme-quinsm .notion-asset-wrapper {
+        margin-top: 1rem;
+        margin-bottom: 1.1rem;
       }
       #theme-quinsm .notion-simple-table {
         display: block;
@@ -74,6 +122,7 @@ const Style = () => {
         font-size: 0.85em;
       }
       #theme-quinsm .notion-code {
+        margin: 1rem 0;
         border-radius: 0.5rem;
         font-size: 0.85em;
         line-height: 1.6;
@@ -114,17 +163,156 @@ const Style = () => {
         color: #f3a500;
       }
 
-      /* 首页文章首图横幅：旧主题 timthumb 裁剪为 700×210 */
-      #theme-quinsm .block-streamText .b-image {
+      /* 首页文章列表：缩略图 + 内容的紧凑编辑流布局 */
+      #theme-quinsm .homeGroup {
+        padding-top: 20px;
+      }
+      #theme-quinsm .homePost {
+        display: grid;
+        grid-template-columns: 190px minmax(0, 1fr);
+        gap: 24px;
+        align-items: center;
+        padding: 28px 0;
+        line-height: 1.5;
+      }
+      #theme-quinsm .homePost--withoutCover {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      #theme-quinsm .homePost-cover {
+        display: block;
+        height: 132px;
+        overflow: hidden;
+        border-radius: 8px;
+        background: #f2f2f2;
+      }
+      #theme-quinsm .homePost-cover .b-image {
         display: block;
         width: 100%;
-        height: 210px;
+        height: 100%;
         object-fit: cover;
-        padding-top: 16px;
+        padding: 0;
+        transition: transform 0.25s ease;
+      }
+      #theme-quinsm .homePost-cover:hover .b-image {
+        transform: scale(1.025);
+      }
+      #theme-quinsm .homePost-body {
+        display: flex;
+        min-width: 0;
+        flex-direction: column;
+        justify-content: center;
+      }
+      #theme-quinsm .homePost .block-postMeta {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        margin-bottom: 0.5rem;
+        color: rgba(0, 0, 0, 0.46);
+        font-size: 12px;
+        line-height: 1.4;
+      }
+      #theme-quinsm .homePost .block-postMeta a {
+        color: inherit;
+      }
+      #theme-quinsm .homePost .block-postMeta a:hover {
+        color: #f3a500;
+      }
+      #theme-quinsm .homePost-metaDivider {
+        color: rgba(0, 0, 0, 0.22);
+      }
+      #theme-quinsm .homePost .block-streamText .block-title {
+        display: -webkit-box;
+        overflow: hidden;
+        margin: 0 0 0.4rem;
+        font-size: 22px;
+        line-height: 1.35;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+      }
+      #theme-quinsm .homePost .block-snippet {
+        display: -webkit-box;
+        overflow: hidden;
+        margin: 0;
+        color: rgba(0, 0, 0, 0.64);
+        font-size: 14px;
+        line-height: 1.65;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+      }
+      #theme-quinsm .homePost .postMeta-previewFooter {
+        margin: 0.65rem 0 0;
+      }
+      #theme-quinsm .homePost .postMeta-previewFooter a {
+        font-size: 13px;
       }
       @media screen and (max-width: 640px) {
-        #theme-quinsm .block-streamText .b-image {
-          height: 140px;
+        #theme-quinsm .homeGroup {
+          padding-top: 8px;
+        }
+        #theme-quinsm .homePost {
+          grid-template-columns: 112px minmax(0, 1fr);
+          gap: 14px;
+          padding: 20px 0;
+        }
+        #theme-quinsm .homePost-cover,
+        #theme-quinsm .homePost-cover .b-image {
+          height: 92px;
+        }
+        #theme-quinsm .homePost .block-streamText .block-title {
+          margin-bottom: 0.25rem;
+          font-size: 18px;
+        }
+        #theme-quinsm .homePost .block-snippet {
+          -webkit-line-clamp: 1;
+        }
+        #theme-quinsm .homePost .postMeta-previewFooter {
+          display: none;
+        }
+        #theme-quinsm .postArticle {
+          padding-top: 28px;
+        }
+        #theme-quinsm .entry-header {
+          margin-bottom: 1.35rem;
+        }
+      }
+
+      /* 暗色模式 */
+      .dark #theme-quinsm .entry-header,
+      .dark #theme-quinsm .homePost {
+        border-color: rgba(255, 255, 255, 0.09);
+      }
+      .dark #theme-quinsm .entry-meta,
+      .dark #theme-quinsm .homePost .block-postMeta {
+        color: rgba(255, 255, 255, 0.48);
+      }
+      .dark #theme-quinsm .entry-metaDivider,
+      .dark #theme-quinsm .homePost-metaDivider {
+        color: rgba(255, 255, 255, 0.2);
+      }
+      .dark #theme-quinsm .notion {
+        color: rgba(255, 255, 255, 0.78);
+      }
+      .dark #theme-quinsm .notion-h {
+        color: rgba(255, 255, 255, 0.9);
+      }
+      .dark #theme-quinsm .notion-quote {
+        background: rgba(243, 165, 0, 0.08);
+        color: rgba(255, 255, 255, 0.7);
+      }
+      .dark #theme-quinsm .homePost-cover {
+        background: rgba(255, 255, 255, 0.06);
+      }
+      .dark #theme-quinsm .homePost .block-snippet {
+        color: rgba(255, 255, 255, 0.64);
+      }
+      @media screen and (max-width: 420px) {
+        #theme-quinsm .homePost {
+          grid-template-columns: 96px minmax(0, 1fr);
+          gap: 12px;
+        }
+        #theme-quinsm .homePost-cover,
+        #theme-quinsm .homePost-cover .b-image {
+          height: 82px;
         }
       }
 
@@ -210,7 +398,9 @@ const Style = () => {
         border-radius: 3px;
         border: 1px solid transparent;
         background: transparent;
-        transition: transform 0.15s ease, border-color 0.15s ease;
+        transition:
+          transform 0.15s ease,
+          border-color 0.15s ease;
       }
       #theme-quinsm .add-smily:hover {
         transform: scale(1.2);
@@ -301,8 +491,12 @@ const Style = () => {
         border-radius: 4px;
       }
       @keyframes quinsm-comment-skeleton {
-        0% { background-position: 200% 0; }
-        100% { background-position: -200% 0; }
+        0% {
+          background-position: 200% 0;
+        }
+        100% {
+          background-position: -200% 0;
+        }
       }
       .dark #theme-quinsm .comment-skeleton {
         background: linear-gradient(
