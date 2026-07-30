@@ -43,12 +43,10 @@ export default function SideBar(props) {
   return (
     <div className='js-sidebarWrapper'>
       {siteConfig('QUINSM_SIDEBAR_NAV', true, CONFIG) && (
-        <aside className='widget widget_text'>
-          <h3 className='widget-title'>
-            <span className='widget-title-inner'>
-              {locale.NAV.INDEX || '导航'}
-            </span>
-          </h3>
+        <aside
+          className='widget widget_text'
+          aria-label={locale.NAV.INDEX || '导航'}
+        >
           <div className='textwidget'>
             {navLinks.map((link, idx) => (
               <a key={idx} href={link.href}>
