@@ -213,10 +213,12 @@ const ShareButtons = ({ post }) => {
           case 'qq':
             return (
               <button
+                type='button'
                 key={singleService}
-                className='cursor-pointer bg-blue-600 text-white rounded-full mx-1'
+                className={`${BASE_BUTTON_CLASS} bg-blue-600`}
                 title={singleService}>
                 <a
+                  className='flex h-full w-full items-center justify-center'
                   target='_blank'
                   rel='noreferrer'
                   aria-label='Share by QQ'
@@ -230,40 +232,39 @@ const ShareButtons = ({ post }) => {
               <button
                 onMouseEnter={openPopover}
                 onMouseLeave={closePopover}
+                onClick={() => setQrCodeShow(show => !show)}
                 aria-label={singleService}
+                aria-expanded={qrCodeShow}
+                type='button'
                 key={singleService}
-                className='cursor-pointer bg-green-600 text-white rounded-full mx-1'
+                className={`${BASE_BUTTON_CLASS} relative bg-green-600`}
                 title={singleService}>
-                <div id='wechat-button'>
-                  <i className='fab fa-weixin w-8' />
-                </div>
-                <div className='absolute'>
-                  <div
-                    id='pop'
-                    className={
-                      (qrCodeShow ? 'opacity-100 ' : ' invisible opacity-0') +
-                      ' z-40 absolute bottom-10 -left-10 bg-white shadow-xl transition-all duration-200 text-center'
-                    }>
-                    <div className='p-2 mt-1 w-28 h-28'>
-                      {qrCodeShow && <QrCode value={shareUrl} />}
-                    </div>
-                    <span className='text-black font-semibold p-1 rounded-t-lg text-sm mx-auto mb-1'>
-                      {locale.COMMON.SCAN_QR_CODE}
-                    </span>
+                <i className='fab fa-weixin text-sm' />
+                <div
+                  id='pop'
+                  className={
+                    (qrCodeShow ? 'opacity-100 ' : 'invisible opacity-0 ') +
+                    'absolute bottom-10 left-1/2 z-40 w-32 -translate-x-1/2 rounded-md bg-white p-2 text-center shadow-xl transition-all duration-200'
+                  }>
+                  <div className='mx-auto h-24 w-24'>
+                    {qrCodeShow && <QrCode value={shareUrl} size={96} />}
                   </div>
+                  <span className='mt-1 block whitespace-nowrap text-xs font-semibold text-black'>
+                    {locale.COMMON.SCAN_QR_CODE}
+                  </span>
                 </div>
               </button>
             )
           case 'link':
             return (
               <button
+                type='button'
                 aria-label={singleService}
                 key={singleService}
-                className='cursor-pointer bg-yellow-500 text-white rounded-full mx-1'
-                title={singleService}>
-                <div alt={locale.COMMON.URL_COPIED} onClick={copyUrl}>
-                  <i className='fas fa-link w-8' />
-                </div>
+                className={`${BASE_BUTTON_CLASS} bg-yellow-500`}
+                title={singleService}
+                onClick={copyUrl}>
+                <i className='fas fa-link text-sm' />
               </button>
             )
           case 'csdn':
