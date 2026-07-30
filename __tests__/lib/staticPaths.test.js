@@ -17,7 +17,10 @@ jest.mock('@/lib/utils/buildMode', () => ({
 
 const { getOrSetDataWithCache } = require('@/lib/cache/cache_manager')
 const { fetchGlobalAllData } = require('@/lib/db/SiteDataApi')
-const { getPriorityPages, prefetchAllBlockMaps } = require('@/lib/build/prefetch')
+const {
+  getPriorityPages,
+  prefetchAllBlockMaps
+} = require('@/lib/build/prefetch')
 const { isExport } = require('@/lib/utils/buildMode')
 
 describe('staticPaths build helpers', () => {
@@ -130,6 +133,18 @@ describe('staticPaths build helpers', () => {
         paths: [{ params: { prefix: 'post', slug: 'hello' } }],
         fallback: 'blocking'
       })
+    })
+  })
+
+  it('keeps standalone page prerenders alive across deployment propagation', () => {
+    jest.isolateModules(() => {
+      const { getContentRevalidateSeconds } = require('@/lib/build/staticPaths')
+
+      expect(
+        getContentRevalidateSeconds({ type: 'Page', status: 'Invisible' }, 60)
+      ).toBe(86400)
+      expect(getContentRevalidateSeconds({ type: 'Page' }, 172800)).toBe(172800)
+      expect(getContentRevalidateSeconds({ type: 'Post' }, '60')).toBe('60')
     })
   })
 })

@@ -1,7 +1,10 @@
 import BLOG from '@/blog.config'
 import { siteConfig } from '@/lib/config'
 import { resolvePostProps } from '@/lib/db/SiteDataApi'
-import { getStaticPathsBase } from '@/lib/build/staticPaths'
+import {
+  getContentRevalidateSeconds,
+  getStaticPathsBase
+} from '@/lib/build/staticPaths'
 import { isExport } from '@/lib/utils/buildMode'
 import { checkSlugHasMorThanTwoSlash } from '@/lib/utils/post'
 import Slug from '..'
@@ -17,7 +20,6 @@ const isStaticExport = process.env.EXPORT === 'true'
 const PrefixSlug = props => {
   return <Slug {...props} />
 }
-
 
 export async function getStaticPaths() {
   return getStaticPathsBase({
@@ -42,23 +44,25 @@ export async function getStaticProps({
   params: { prefix, slug, suffix },
   locale
 }) {
-
   const props = await resolvePostProps({
     prefix,
     slug,
     suffix,
-    locale,
+    locale
   })
 
   return {
     props,
     revalidate: isStaticExport
       ? undefined
-      : siteConfig(
-        'NEXT_REVALIDATE_SECOND',
-        BLOG.NEXT_REVALIDATE_SECOND,
-        props.NOTION_CONFIG
-      ),
+      : getContentRevalidateSeconds(
+          props.post,
+          siteConfig(
+            'NEXT_REVALIDATE_SECOND',
+            BLOG.NEXT_REVALIDATE_SECOND,
+            props.NOTION_CONFIG
+          )
+        ),
     notFound: !props.post
   }
 }

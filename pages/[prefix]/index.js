@@ -16,7 +16,10 @@ import md5 from 'js-md5'
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
 import { useEffect, useState } from 'react'
-import { getStaticPathsBase } from '@/lib/build/staticPaths'
+import {
+  getContentRevalidateSeconds,
+  getStaticPathsBase
+} from '@/lib/build/staticPaths'
 import { isExport } from '@/lib/utils/buildMode'
 
 const isStaticExport = process.env.EXPORT === 'true'
@@ -134,18 +137,21 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params: { prefix }, locale }) {
   const props = await resolvePostProps({
     prefix,
-    locale,
+    locale
   })
 
   return {
     props,
     revalidate: isStaticExport
       ? undefined
-      : siteConfig(
-        'NEXT_REVALIDATE_SECOND',
-        BLOG.NEXT_REVALIDATE_SECOND,
-        props.NOTION_CONFIG
-      ),
+      : getContentRevalidateSeconds(
+          props.post,
+          siteConfig(
+            'NEXT_REVALIDATE_SECOND',
+            BLOG.NEXT_REVALIDATE_SECOND,
+            props.NOTION_CONFIG
+          )
+        ),
     notFound: !props.post
   }
 }
