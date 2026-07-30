@@ -38,7 +38,7 @@ function getInitial(name) {
  */
 function getAvatarUrl(emailHash, author) {
   if (emailHash) {
-    return `https://www.gravatar.com/avatar/${emailHash}?s=72&d=mm&r=g`
+    return `https://gravatar.com/avatar/${emailHash}?s=72&d=identicon&r=g`
   }
   // 用昵称生成默认头像颜色
   const hue = (author || 'A').charCodeAt(0) % 36 * 10
@@ -266,6 +266,7 @@ export default function QuinsmComments({ postId }) {
               width='36'
               height='36'
               loading='lazy'
+              referrerPolicy='no-referrer'
             />
           </div>
           <div className='comment-meta'>

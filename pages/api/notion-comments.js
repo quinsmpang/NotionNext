@@ -51,8 +51,23 @@ const getDatabaseProperties = async notion => {
   return database.properties || {}
 }
 
-const hashEmail = email =>
-  createHash('sha256').update(email).digest('hex').slice(0, 32)
+export const createGravatarHash = email =>
+  createHash('sha256')
+    .update(String(email || '').trim().toLowerCase())
+    .digest('hex')
+
+const formatApiComment = page => {
+  const comment = formatNotionComment(page)
+  const author =
+    page?.properties?.Author?.type === 'email'
+      ? page.properties.Author.email
+      : ''
+
+  return {
+    ...comment,
+    emailHash: author ? createGravatarHash(author) : comment.emailHash
+  }
+}
 
 const fetchComments = async postId => {
   const notion = getClient()
@@ -73,7 +88,7 @@ const fetchComments = async postId => {
     comments.push(
       ...response.results
         .filter(page => 'properties' in page)
-        .map(formatNotionComment)
+        .map(formatApiComment)
         .filter(isPublicComment)
     )
     startCursor = response.has_more ? response.next_cursor : undefined
@@ -152,7 +167,7 @@ export default async function handler(req, res) {
     }
     if (hasProperty(properties, 'EmailHash', 'rich_text')) {
       pageProperties.EmailHash = {
-        rich_text: [{ text: { content: hashEmail(author) } }]
+        rich_text: [{ text: { content: createGravatarHash(author) } }]
       }
     }
     if (hasProperty(properties, 'Status', 'select')) {
@@ -175,7 +190,7 @@ export default async function handler(req, res) {
     })
 
     return res.status(200).json({
-      comment: formatNotionComment(response),
+      comment: formatApiComment(response),
       pending: requireApproval
     })
   } catch (error) {
