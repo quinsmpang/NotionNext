@@ -1,5 +1,6 @@
 import { siteConfig } from '@/lib/config'
 import { useGlobal } from '@/lib/global'
+import ShareSvgIcon from '@/components/ShareSvgIcon'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
@@ -14,7 +15,6 @@ const SHARE_ICON_CLASS = {
   messenger: 'fab fa-facebook-messenger',
   line: 'fab fa-line',
   reddit: 'fab fa-reddit-alien',
-  email: 'fas fa-envelope',
   twitter: 'fab fa-x-twitter',
   telegram: 'fab fa-telegram-plane',
   whatsapp: 'fab fa-whatsapp',
@@ -175,7 +175,11 @@ const ShareButtons = ({ post }) => {
         onClick={() => openShareWindow(shareLink)}
         className={`${BASE_BUTTON_CLASS} ${bgClass}`}
         title={service}>
-        <i className={`${iconClass} text-sm`} />
+        {service === 'email' ? (
+          <ShareSvgIcon name='email' />
+        ) : (
+          <i className={`${iconClass} text-sm`} />
+        )}
       </button>
     )
   }
@@ -212,20 +216,16 @@ const ShareButtons = ({ post }) => {
             return renderCommonShareButton(singleService)
           case 'qq':
             return (
-              <button
-                type='button'
+              <a
                 key={singleService}
                 className={`${BASE_BUTTON_CLASS} bg-blue-600`}
-                title={singleService}>
-                <a
-                  className='flex h-full w-full items-center justify-center'
-                  target='_blank'
-                  rel='noreferrer'
-                  aria-label='Share by QQ'
-                  href={`http://connect.qq.com/widget/shareqq/index.html?url=${shareUrl}&sharesource=qzone&title=${title}&desc=${body}`}>
-                  <i className='fab fa-qq w-8' />
-                </a>
-              </button>
+                target='_blank'
+                rel='noreferrer'
+                aria-label='Share by QQ'
+                title={singleService}
+                href={`http://connect.qq.com/widget/shareqq/index.html?url=${shareUrl}&sharesource=qzone&title=${title}&desc=${body}`}>
+                <ShareSvgIcon name='qq' />
+              </a>
             )
           case 'wechat':
             return (
@@ -239,7 +239,7 @@ const ShareButtons = ({ post }) => {
                 key={singleService}
                 className={`${BASE_BUTTON_CLASS} relative bg-green-600`}
                 title={singleService}>
-                <i className='fab fa-weixin text-sm' />
+                <ShareSvgIcon name='wechat' />
                 <div
                   id='pop'
                   className={
@@ -264,7 +264,7 @@ const ShareButtons = ({ post }) => {
                 className={`${BASE_BUTTON_CLASS} bg-yellow-500`}
                 title={singleService}
                 onClick={copyUrl}>
-                <i className='fas fa-link text-sm' />
+                <ShareSvgIcon name='link' />
               </button>
             )
           case 'csdn':
