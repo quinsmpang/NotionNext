@@ -163,110 +163,48 @@ const Style = () => {
         color: #f3a500;
       }
 
-      /* 首页文章列表：缩略图 + 内容的紧凑编辑流布局 */
+      /* 首页文章列表：保留原主题的标题上方横幅图布局 */
       #theme-quinsm .homeGroup {
-        padding-top: 20px;
+        padding-top: 0;
       }
       #theme-quinsm .homePost {
-        display: grid;
-        grid-template-columns: 190px minmax(0, 1fr);
-        gap: 24px;
-        align-items: center;
-        padding: 28px 0;
-        line-height: 1.5;
+        padding: 42px 0;
       }
-      #theme-quinsm .homePost--withoutCover {
-        grid-template-columns: minmax(0, 1fr);
-      }
-      #theme-quinsm .homePost-cover {
-        display: block;
-        height: 132px;
-        overflow: hidden;
-        border-radius: 8px;
-        background: #f2f2f2;
-      }
-      #theme-quinsm .homePost-cover .b-image {
+      #theme-quinsm .homePost .block-streamText .b-image {
         display: block;
         width: 100%;
-        height: 100%;
+        height: 210px;
         object-fit: cover;
-        padding: 0;
-        transition: transform 0.25s ease;
-      }
-      #theme-quinsm .homePost-cover:hover .b-image {
-        transform: scale(1.025);
-      }
-      #theme-quinsm .homePost-body {
-        display: flex;
-        min-width: 0;
-        flex-direction: column;
-        justify-content: center;
+        padding-top: 16px;
       }
       #theme-quinsm .homePost .block-postMeta {
-        display: flex;
-        align-items: center;
-        gap: 0.55rem;
-        margin-bottom: 0.5rem;
         color: rgba(0, 0, 0, 0.46);
         font-size: 12px;
         line-height: 1.4;
       }
-      #theme-quinsm .homePost .block-postMeta a {
-        color: inherit;
-      }
-      #theme-quinsm .homePost .block-postMeta a:hover {
-        color: #f3a500;
-      }
-      #theme-quinsm .homePost-metaDivider {
-        color: rgba(0, 0, 0, 0.22);
-      }
       #theme-quinsm .homePost .block-streamText .block-title {
-        display: -webkit-box;
-        overflow: hidden;
-        margin: 0 0 0.4rem;
-        font-size: 22px;
-        line-height: 1.35;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
+        margin-top: 16px;
+        margin-bottom: 4px;
       }
       #theme-quinsm .homePost .block-snippet {
-        display: -webkit-box;
-        overflow: hidden;
-        margin: 0;
-        color: rgba(0, 0, 0, 0.64);
-        font-size: 14px;
-        line-height: 1.65;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
+        color: rgba(0, 0, 0, 0.7);
       }
       #theme-quinsm .homePost .postMeta-previewFooter {
-        margin: 0.65rem 0 0;
-      }
-      #theme-quinsm .homePost .postMeta-previewFooter a {
-        font-size: 13px;
+        margin-top: 6px;
       }
       @media screen and (max-width: 640px) {
         #theme-quinsm .homeGroup {
-          padding-top: 8px;
+          padding-top: 0;
         }
         #theme-quinsm .homePost {
-          grid-template-columns: 112px minmax(0, 1fr);
-          gap: 14px;
-          padding: 20px 0;
+          padding: 25px 0;
         }
-        #theme-quinsm .homePost-cover,
-        #theme-quinsm .homePost-cover .b-image {
-          height: 92px;
+        #theme-quinsm .homePost .block-streamText .b-image {
+          height: 140px;
         }
         #theme-quinsm .homePost .block-streamText .block-title {
-          margin-bottom: 0.25rem;
+          margin-top: 14px;
           font-size: 18px;
-        }
-        #theme-quinsm .homePost .block-snippet {
-          -webkit-line-clamp: 1;
-        }
-        #theme-quinsm .homePost .postMeta-previewFooter {
-          display: none;
         }
         #theme-quinsm .postArticle {
           padding-top: 28px;
@@ -277,16 +215,14 @@ const Style = () => {
       }
 
       /* 暗色模式 */
-      .dark #theme-quinsm .entry-header,
-      .dark #theme-quinsm .homePost {
+      .dark #theme-quinsm .entry-header {
         border-color: rgba(255, 255, 255, 0.09);
       }
       .dark #theme-quinsm .entry-meta,
       .dark #theme-quinsm .homePost .block-postMeta {
         color: rgba(255, 255, 255, 0.48);
       }
-      .dark #theme-quinsm .entry-metaDivider,
-      .dark #theme-quinsm .homePost-metaDivider {
+      .dark #theme-quinsm .entry-metaDivider {
         color: rgba(255, 255, 255, 0.2);
       }
       .dark #theme-quinsm .notion {
@@ -299,21 +235,8 @@ const Style = () => {
         background: rgba(243, 165, 0, 0.08);
         color: rgba(255, 255, 255, 0.7);
       }
-      .dark #theme-quinsm .homePost-cover {
-        background: rgba(255, 255, 255, 0.06);
-      }
       .dark #theme-quinsm .homePost .block-snippet {
         color: rgba(255, 255, 255, 0.64);
-      }
-      @media screen and (max-width: 420px) {
-        #theme-quinsm .homePost {
-          grid-template-columns: 96px minmax(0, 1fr);
-          gap: 12px;
-        }
-        #theme-quinsm .homePost-cover,
-        #theme-quinsm .homePost-cover .b-image {
-          height: 82px;
-        }
       }
 
       /* ========== 自建评论系统：暗色模式 & 表情 & 表单适配 ========== */
