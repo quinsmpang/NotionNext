@@ -250,6 +250,100 @@ const Style = () => {
         color: rgba(255, 255, 255, 0.35);
       }
 
+      /* 评论表单 */
+      #theme-quinsm .responsesWrapper {
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+      }
+      #theme-quinsm .quinsm-comment-form {
+        width: 100%;
+      }
+      #theme-quinsm .quinsm-comment-form .comment-form-comment {
+        margin: 0 0 10px;
+      }
+      #theme-quinsm .quinsm-comment-textarea {
+        display: block;
+        width: 100%;
+        min-height: 136px;
+        box-sizing: border-box;
+        padding: 13px 15px;
+        resize: vertical;
+        border: 1px solid rgba(0, 0, 0, 0.16);
+        border-radius: 6px;
+        background: #fff;
+        color: rgba(0, 0, 0, 0.78);
+        font: inherit;
+        line-height: 1.7;
+        transition:
+          border-color 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+      #theme-quinsm .quinsm-comment-textarea:focus,
+      #theme-quinsm .quinsm-comment-input:focus {
+        border-color: #f3a500;
+        box-shadow: 0 0 0 3px rgba(243, 165, 0, 0.1);
+      }
+      #theme-quinsm .quinsm-comment-fields {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+        margin-top: 14px;
+      }
+      #theme-quinsm .quinsm-comment-fields .comment-form-input {
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 6px;
+        min-width: 0;
+        margin: 0;
+      }
+      #theme-quinsm .comment-form-input label {
+        position: static;
+        padding: 0;
+        background: transparent;
+        color: rgba(0, 0, 0, 0.58);
+        font-size: 12px;
+        line-height: 1.4;
+      }
+      #theme-quinsm .quinsm-comment-input {
+        display: block;
+        width: 100%;
+        height: 42px;
+        box-sizing: border-box;
+        padding: 9px 12px;
+        border: 1px solid rgba(0, 0, 0, 0.16);
+        border-radius: 6px;
+        background: #fff;
+        color: rgba(0, 0, 0, 0.78);
+        font: inherit;
+        transition:
+          border-color 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+      #theme-quinsm .quinsm-comment-form .form-submit {
+        margin: 16px 0 0;
+      }
+      #theme-quinsm .quinsm-comment-form #submit {
+        min-width: 96px;
+        height: 40px;
+        padding: 0 18px;
+        border-radius: 5px;
+        background: #f3a500;
+        color: #fff;
+        font-size: 13px;
+        transition:
+          opacity 0.2s ease,
+          transform 0.2s ease;
+      }
+      #theme-quinsm .quinsm-comment-form #submit:hover:not(:disabled) {
+        opacity: 0.88;
+        transform: translateY(-1px);
+      }
+      #theme-quinsm .quinsm-comment-form #submit:disabled {
+        cursor: not-allowed;
+        opacity: 0.55;
+      }
+
       /* 评论区暗色适配 */
       .dark #theme-quinsm .comment-block {
         border-bottom-color: rgba(255, 255, 255, 0.08);
@@ -263,12 +357,15 @@ const Style = () => {
       .dark #theme-quinsm .comment-meta .time {
         color: rgba(255, 255, 255, 0.5);
       }
+      .dark #theme-quinsm .responsesWrapper {
+        border-top-color: rgba(255, 255, 255, 0.09);
+      }
       .dark #theme-quinsm .comment-form-input label {
-        background: #1a1a1a;
+        background: transparent;
         color: rgba(255, 255, 255, 0.65);
       }
-      .dark #theme-quinsm .comment-form-input input,
-      .dark #theme-quinsm #comment {
+      .dark #theme-quinsm .quinsm-comment-input,
+      .dark #theme-quinsm .quinsm-comment-textarea {
         color: rgba(255, 255, 255, 0.85);
         background: rgba(255, 255, 255, 0.05);
         border-color: rgba(255, 255, 255, 0.2);
@@ -295,10 +392,11 @@ const Style = () => {
 
       /* 表情选择器容器 */
       #theme-quinsm .comment-form-smilies {
-        margin-bottom: 8px;
         display: flex;
         flex-wrap: wrap;
-        gap: 2px;
+        gap: 3px;
+        margin: 0;
+        padding: 2px 0 10px;
       }
 
       /* 阿鲁表情：渲染后的 img 和选择器中的 img */
@@ -344,6 +442,20 @@ const Style = () => {
         display: flex;
         align-items: center;
         gap: 8px;
+      }
+
+      @media screen and (max-width: 640px) {
+        #theme-quinsm .responsesWrapper {
+          margin-top: 1.5rem;
+          padding-top: 1.25rem;
+        }
+        #theme-quinsm .quinsm-comment-textarea {
+          min-height: 120px;
+        }
+        #theme-quinsm .quinsm-comment-fields {
+          grid-template-columns: minmax(0, 1fr);
+          gap: 12px;
+        }
       }
 
       /* 通知条 */

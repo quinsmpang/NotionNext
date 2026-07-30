@@ -464,12 +464,13 @@ export default function QuinsmComments({ postId }) {
           )}
         </h3>
 
-        <form id='commentform' onSubmit={e => { void handleSubmit(e) }} noValidate>
+        <form id='commentform' className='quinsm-comment-form' onSubmit={e => { void handleSubmit(e) }} noValidate>
           {/* 评论文本域 */}
           <p className='comment-form-comment'>
             <textarea
               ref={contentRef}
               id={COMMENT_TEXTAREA_ID}
+              className='quinsm-comment-textarea'
               name='comment'
               maxLength={2000}
               required
@@ -483,34 +484,38 @@ export default function QuinsmComments({ postId }) {
           {/* 阿鲁表情选择器 */}
           <AluEmojiPicker textareaId={COMMENT_TEXTAREA_ID} />
 
-          {/* 昵称 */}
-          <p className='comment-form-input'>
-            <input
-              id='quinsm-author'
-              name='author'
-              type='text'
-              maxLength={40}
-              value={nickname}
-              onChange={e => setNickname(e.target.value)}
-              placeholder=' '
-            />
-            <label htmlFor='quinsm-author'>昵称</label>
-          </p>
+          <div className='quinsm-comment-fields'>
+            {/* 昵称 */}
+            <p className='comment-form-input'>
+              <input
+                id='quinsm-author'
+                className='quinsm-comment-input'
+                name='author'
+                type='text'
+                maxLength={40}
+                value={nickname}
+                onChange={e => setNickname(e.target.value)}
+                placeholder=' '
+              />
+              <label htmlFor='quinsm-author'>昵称</label>
+            </p>
 
-          {/* 邮箱 */}
-          <p className='comment-form-input'>
-            <input
-              id='quinsm-email'
-              name='email'
-              type='email'
-              maxLength={254}
-              required
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              placeholder=' '
-            />
-            <label htmlFor='quinsm-email'>邮箱（不会公开）</label>
-          </p>
+            {/* 邮箱 */}
+            <p className='comment-form-input'>
+              <input
+                id='quinsm-email'
+                className='quinsm-comment-input'
+                name='email'
+                type='email'
+                maxLength={254}
+                required
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder=' '
+              />
+              <label htmlFor='quinsm-email'>邮箱（不会公开）</label>
+            </p>
+          </div>
 
           {/* Honeypot 网站字段（对人隐藏，对机器人可见） */}
           <p
