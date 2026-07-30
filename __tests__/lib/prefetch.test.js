@@ -38,9 +38,31 @@ describe('getPriorityPages', () => {
         type: 'Post',
         status: 'Published',
         publishDate: '2026-01-01'
+      },
+      {
+        id: 'about-menu',
+        slug: '/about',
+        type: 'Menu',
+        status: 'Published'
+      },
+      {
+        id: 'links-menu',
+        slug: '/links',
+        type: 'Menu',
+        status: 'Published'
       }
     ]
 
-    expect(getPriorityPages(pages)).toEqual([pages[0], pages[1], pages[2]])
+    expect(getPriorityPages(pages)).toEqual([
+      pages[0],
+      pages[1],
+      {
+        ...pages[4],
+        type: 'Page',
+        slug: 'links',
+        ext: { menuFallback: true }
+      },
+      pages[2]
+    ])
   })
 })
