@@ -23,6 +23,7 @@ import {
   findFirstBodyImage,
   getBlockMapFromResponse,
   getImageUrlFromBlock,
+  isNotionSolidColorCover,
   unwrapNotionBlock
 } from '@/lib/db/notion/getPageProperties'
 
@@ -66,6 +67,20 @@ describe('Notion body image extraction', () => {
       getBlockMapFromResponse({ recordMapWithRoles: { block: blockMap } })
     ).toBe(blockMap)
     expect(getBlockMapFromResponse({ block: blockMap })).toBe(blockMap)
+  })
+
+  it('recognizes Notion solid color covers as thumbnail placeholders', () => {
+    expect(isNotionSolidColorCover('/images/page-cover/solid_yellow.png')).toBe(
+      true
+    )
+    expect(
+      isNotionSolidColorCover(
+        'https://www.notion.so/images/page-cover/solid_blue.png'
+      )
+    ).toBe(true)
+    expect(
+      isNotionSolidColorCover('https://example.com/images/article-cover.png')
+    ).toBe(false)
   })
 
   it('finds the first body image in the current double-value response', async () => {
