@@ -17,24 +17,24 @@ const Style = () => {
 
       /* 内容页标题与元信息 */
       #theme-quinsm .entry-header {
-        margin-bottom: 1.75rem;
-        padding-bottom: 1rem;
+        margin-bottom: 1.25rem;
+        padding-bottom: 0.75rem;
         border-bottom: 1px solid rgba(0, 0, 0, 0.08);
       }
       #theme-quinsm .entry-title {
-        font-size: clamp(1.8rem, 4vw, 2.2rem);
-        line-height: 1.28;
-        font-weight: 700;
-        letter-spacing: -0.025em;
-        margin-bottom: 0.65rem;
+        font-size: clamp(1.65rem, 3.2vw, 1.9rem);
+        line-height: 1.25;
+        font-weight: 650;
+        letter-spacing: -0.02em;
+        margin-bottom: 0.5rem;
         color: inherit;
       }
       #theme-quinsm .entry-meta {
         display: flex;
         align-items: center;
-        gap: 0.6rem;
-        font-size: 0.8125rem;
-        line-height: 1.5;
+        gap: 0.45rem;
+        font-size: 0.75rem;
+        line-height: 1.4;
         color: rgba(0, 0, 0, 0.48);
       }
       #theme-quinsm .entry-meta a {
@@ -50,7 +50,7 @@ const Style = () => {
 
       /* 内容页：保持原图片布局，仅优化正文阅读节奏 */
       #theme-quinsm .postArticle {
-        padding-top: 34px;
+        padding-top: 28px;
         padding-bottom: 8px;
       }
       #theme-quinsm #notion-article {
@@ -62,16 +62,16 @@ const Style = () => {
         width: 100% !important;
       }
       #theme-quinsm .notion {
-        font-size: 16px;
-        line-height: 1.78;
+        font-size: 15px;
+        line-height: 1.68;
         color: rgba(0, 0, 0, 0.8);
         overflow-wrap: anywhere;
         text-rendering: optimizeLegibility;
       }
       #theme-quinsm .notion-text {
         margin: 0 !important;
-        padding: 3px 0 8px !important;
-        line-height: 1.78 !important;
+        padding: 1px 0 5px !important;
+        line-height: 1.68 !important;
       }
       #theme-quinsm .notion-h {
         display: block;
@@ -82,74 +82,74 @@ const Style = () => {
         padding: 0;
       }
       #theme-quinsm .notion-h1 {
-        margin-top: 1.65em;
-        margin-bottom: 0.58em;
-        font-size: 1.65em;
-      }
-      #theme-quinsm .notion-h2 {
-        margin-top: 1.6em;
-        margin-bottom: 0.55em;
-        font-size: 1.45em;
-      }
-      #theme-quinsm .notion-h3 {
-        margin-top: 1.35em;
-        margin-bottom: 0.48em;
-        font-size: 1.22em;
-      }
-      #theme-quinsm .notion-h4 {
         margin-top: 1.25em;
         margin-bottom: 0.45em;
-        font-size: 1.08em;
+        font-size: 1.5em;
+      }
+      #theme-quinsm .notion-h2 {
+        margin-top: 1.2em;
+        margin-bottom: 0.42em;
+        font-size: 1.32em;
+      }
+      #theme-quinsm .notion-h3 {
+        margin-top: 1.1em;
+        margin-bottom: 0.38em;
+        font-size: 1.16em;
+      }
+      #theme-quinsm .notion-h4 {
+        margin-top: 1.05em;
+        margin-bottom: 0.35em;
+        font-size: 1.04em;
       }
       #theme-quinsm .entry-content .notion-list {
-        margin: 0.3em 0 0.8em;
-        padding-inline-start: 1.55em;
+        margin: 0.2em 0 0.6em;
+        padding-inline-start: 1.45em;
       }
       #theme-quinsm .entry-content .notion-list li {
         margin: 0;
-        padding: 0.22em 0 0.22em 0.1em;
-        line-height: 1.72;
+        padding: 0.15em 0 0.15em 0.08em;
+        line-height: 1.65;
       }
       #theme-quinsm .entry-content .notion-list li::before {
         content: none;
       }
       #theme-quinsm .notion-quote {
-        margin: 0.9rem 0;
-        padding: 0.72rem 1rem;
+        margin: 0.7rem 0;
+        padding: 0.58rem 0.85rem;
         border-left: 3px solid #f3a500;
         background: rgba(243, 165, 0, 0.055);
         color: rgba(0, 0, 0, 0.68);
-        font-size: 1em;
-        line-height: 1.72;
+        font-size: 0.96em;
+        line-height: 1.62;
       }
       #theme-quinsm .notion-callout {
         align-items: flex-start;
-        margin: 0.9rem 0;
-        padding: 14px 16px 14px 13px;
-        border-radius: 8px;
+        margin: 0.7rem 0;
+        padding: 11px 13px 11px 11px;
+        border-radius: 6px;
         border-color: rgba(0, 0, 0, 0.08);
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.025);
-        line-height: 1.72;
+        line-height: 1.65;
       }
       #theme-quinsm .notion-callout-text {
-        margin-left: 10px;
+        margin-left: 8px;
       }
       #theme-quinsm .notion-callout-text .notion-text {
-        padding: 0 0 0.25rem !important;
-        line-height: 1.72 !important;
+        padding: 0 0 0.15rem !important;
+        line-height: 1.65 !important;
       }
       #theme-quinsm .notion-toggle {
-        padding: 5px 0;
-        line-height: 1.7;
+        padding: 3px 0;
+        line-height: 1.65;
       }
       #theme-quinsm .notion-hr {
-        margin: 1.5rem 0;
+        margin: 1.15rem 0;
         border-bottom-color: rgba(0, 0, 0, 0.1);
       }
       #theme-quinsm .notion-bookmark {
-        margin: 0.9rem 0;
+        margin: 0.7rem 0;
         border-color: rgba(0, 0, 0, 0.1);
-        border-radius: 7px;
+        border-radius: 6px;
       }
       #theme-quinsm .notion-link:hover {
         color: #d98f00;
@@ -165,8 +165,8 @@ const Style = () => {
         border-radius: 8px;
       }
       #theme-quinsm .notion-asset-wrapper {
-        margin-top: 1rem;
-        margin-bottom: 1.1rem;
+        margin-top: 0.8rem;
+        margin-bottom: 0.9rem;
       }
       #theme-quinsm .notion-simple-table {
         display: block;
@@ -184,11 +184,11 @@ const Style = () => {
         border-radius: 4px;
       }
       #theme-quinsm .notion-code {
-        margin: 0.9rem 0 1.1rem;
-        padding: 1rem 1.1rem;
+        margin: 0.75rem 0 0.9rem;
+        padding: 0.85rem 1rem;
         border-radius: 0.5rem;
         font-size: 0.85em;
-        line-height: 1.6;
+        line-height: 1.55;
       }
 
       /* 文章底部提示 */
@@ -231,68 +231,96 @@ const Style = () => {
         padding-top: 0;
       }
       #theme-quinsm .homePost {
-        padding: 42px 0;
+        padding: 32px 0;
       }
       #theme-quinsm .homePost .block-streamText .b-image {
         display: block;
         width: 100%;
         height: 210px;
         object-fit: cover;
-        padding-top: 16px;
+        padding-top: 12px;
       }
       #theme-quinsm .homePost .block-postMeta {
         color: rgba(0, 0, 0, 0.46);
-        font-size: 12px;
-        line-height: 1.4;
+        font-size: 11.5px;
+        line-height: 1.35;
       }
       #theme-quinsm .homePost .block-streamText .block-title {
-        margin-top: 16px;
-        margin-bottom: 4px;
+        margin-top: 12px;
+        margin-bottom: 3px;
+        font-size: 21px;
+        font-weight: 600;
+        line-height: 1.32;
+        letter-spacing: -0.015em;
       }
       #theme-quinsm .homePost .block-snippet {
         color: rgba(0, 0, 0, 0.7);
+        font-size: 14.5px;
+        line-height: 1.58;
+        margin: 3px 0 6px;
       }
       #theme-quinsm .homePost .postMeta-previewFooter {
-        margin-top: 6px;
+        margin-top: 4px;
+        font-size: 12px;
+      }
+      #theme-quinsm .layoutMultiColumn--secondary .js-sidebarWrapper {
+        padding-top: 32px;
+      }
+      #theme-quinsm .layoutMultiColumn--secondary .textwidget {
+        font-size: 14px;
+        line-height: 1.65;
+      }
+      #theme-quinsm .layoutMultiColumn--secondary .widget {
+        margin-bottom: 32px;
+      }
+      #theme-quinsm .layoutMultiColumn--secondary .list--withIcon .list-item {
+        margin-top: 14px;
+      }
+      #theme-quinsm .layoutMultiColumn--secondary .list--withIcon .list-itemInfo {
+        padding-bottom: 14px;
       }
       @media screen and (max-width: 640px) {
         #theme-quinsm .homeGroup {
           padding-top: 0;
         }
         #theme-quinsm .homePost {
-          padding: 25px 0;
+          padding: 20px 0;
         }
         #theme-quinsm .homePost .block-streamText .b-image {
           height: 140px;
         }
         #theme-quinsm .homePost .block-streamText .block-title {
-          margin-top: 14px;
-          font-size: 18px;
+          margin-top: 10px;
+          font-size: 17px;
+        }
+        #theme-quinsm .homePost .block-snippet {
+          font-size: 14px;
+          line-height: 1.55;
         }
         #theme-quinsm .postArticle {
-          padding-top: 26px;
+          padding-top: 22px;
         }
         #theme-quinsm .entry-header {
-          margin-bottom: 1.35rem;
+          margin-bottom: 1rem;
         }
         #theme-quinsm .notion {
-          font-size: 15.5px;
-          line-height: 1.76;
+          font-size: 14.5px;
+          line-height: 1.66;
         }
         #theme-quinsm .notion-text {
-          line-height: 1.76 !important;
-          padding-bottom: 7px !important;
+          line-height: 1.66 !important;
+          padding-bottom: 4px !important;
         }
         #theme-quinsm .notion-h1,
         #theme-quinsm .notion-h2 {
-          margin-top: 1.45em;
+          margin-top: 1.15em;
         }
         #theme-quinsm .notion-h3,
         #theme-quinsm .notion-h4 {
-          margin-top: 1.25em;
+          margin-top: 1.05em;
         }
         #theme-quinsm .notion-callout {
-          padding: 12px 13px 12px 11px;
+          padding: 10px 11px 10px 9px;
         }
       }
 
