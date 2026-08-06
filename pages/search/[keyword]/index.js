@@ -55,8 +55,10 @@ export async function getStaticProps({ params: { keyword }, locale }) {
 
 export function getStaticPaths() {
   return {
+    // blocking：首次访问服务端生成完整页面。
+    // 不能用 fallback: true —— 客户端自动刷新不可靠，会一直停留在空骨架页
     paths: [{ params: { keyword: 'NotionNext' } }],
-    fallback: true
+    fallback: 'blocking'
   }
 }
 
