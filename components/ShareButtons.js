@@ -78,6 +78,7 @@ const ShareButtons = ({ post }) => {
   const titleWithSiteInfo = title + ' | ' + siteConfig('TITLE')
   const { locale } = useGlobal()
   const [qrCodeShow, setQrCodeShow] = useState(false)
+  const [popAlign, setPopAlign] = useState('left-0')
 
   const copyUrl = () => {
     // 确保 shareUrl 是一个正确的字符串并进行解码
@@ -86,7 +87,16 @@ const ShareButtons = ({ post }) => {
     alert(locale.COMMON.URL_COPIED + ' \n' + decodedUrl)
   }
 
-  const openPopover = () => {
+  const openPopover = e => {
+    // 弹层宽度 128px（w-32）：按钮在左半屏时左对齐、右半屏时右对齐，
+    // 避免弹层居中定位时溢出视口（移动端按钮靠左时只显示一半）
+    const rect = e?.currentTarget?.getBoundingClientRect()
+    if (rect && typeof window !== 'undefined') {
+      const btnCenter = rect.left + rect.width / 2
+      setPopAlign(
+        btnCenter < document.documentElement.clientWidth / 2 ? 'left-0' : 'right-0'
+      )
+    }
     setQrCodeShow(true)
   }
   const closePopover = () => {
@@ -244,7 +254,7 @@ const ShareButtons = ({ post }) => {
                   id='pop'
                   className={
                     (qrCodeShow ? 'opacity-100 ' : 'invisible opacity-0 ') +
-                    'absolute bottom-10 left-1/2 z-40 w-32 -translate-x-1/2 rounded-md bg-white p-2 text-center shadow-xl transition-all duration-200'
+                    `absolute bottom-10 z-40 w-32 ${popAlign} rounded-md bg-white p-2 text-center shadow-xl transition-all duration-200`
                   }>
                   <div className='mx-auto h-24 w-24'>
                     {qrCodeShow && <QrCode value={shareUrl} size={96} />}

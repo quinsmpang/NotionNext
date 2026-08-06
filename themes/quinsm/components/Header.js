@@ -42,15 +42,6 @@ export default function Header(props) {
             >
               <i className='iconfont icon-search'></i>
             </button>
-            <a className='metabar-user-avatar js-action' href='/'>
-              <img
-                alt={siteConfig('AUTHOR')}
-                src={siteConfig('QUINSM_AUTHOR_AVATAR', null, CONFIG)}
-                className='avatar avatar-32 photo'
-                height='32'
-                width='32'
-              />
-            </a>
           </div>
         </div>
       </div>

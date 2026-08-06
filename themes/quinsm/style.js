@@ -96,6 +96,11 @@ const Style = () => {
         color: rgba(255, 255, 255, 0.35);
       }
 
+      /* 文章底部补充区：允许分享二维码弹层溢出显示（v-overflowHidden 会裁剪绝对定位弹层） */
+      #theme-quinsm .supplementalPostContent {
+        overflow: visible !important;
+      }
+
       /* 内容页：保持原图片布局，仅优化正文阅读节奏（紧凑排版） */
       #theme-quinsm .postArticle {
         padding-top: 20px;
