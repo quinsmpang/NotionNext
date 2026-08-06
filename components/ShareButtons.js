@@ -87,9 +87,9 @@ const ShareButtons = ({ post }) => {
     alert(locale.COMMON.URL_COPIED + ' \n' + decodedUrl)
   }
 
-  const openPopover = e => {
-    // 弹层宽度 128px（w-32）：按钮在左半屏时左对齐、右半屏时右对齐，
-    // 避免弹层居中定位时溢出视口（移动端按钮靠左时只显示一半）
+  // 弹层宽度 128px（w-32）：按钮在左半屏时左对齐、右半屏时右对齐，
+  // 避免弹层居中定位时溢出视口（移动端按钮靠左时只显示一半）
+  const updatePopAlign = e => {
     const rect = e?.currentTarget?.getBoundingClientRect()
     if (rect && typeof window !== 'undefined') {
       const btnCenter = rect.left + rect.width / 2
@@ -97,6 +97,10 @@ const ShareButtons = ({ post }) => {
         btnCenter < document.documentElement.clientWidth / 2 ? 'left-0' : 'right-0'
       )
     }
+  }
+
+  const openPopover = e => {
+    updatePopAlign(e)
     setQrCodeShow(true)
   }
   const closePopover = () => {
@@ -242,7 +246,10 @@ const ShareButtons = ({ post }) => {
               <button
                 onMouseEnter={openPopover}
                 onMouseLeave={closePopover}
-                onClick={() => setQrCodeShow(show => !show)}
+                onClick={e => {
+                  updatePopAlign(e)
+                  setQrCodeShow(show => !show)
+                }}
                 aria-label={singleService}
                 aria-expanded={qrCodeShow}
                 type='button'
