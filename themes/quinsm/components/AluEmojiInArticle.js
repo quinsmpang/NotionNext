@@ -8,23 +8,25 @@
  */
 import { useEffect } from 'react'
 import {
-  ALU_BASE,
-  ALU_EMOJI_MAP,
+  GENERIC_EMOJI_SRC,
   SORTED_SHORTCUTS,
-  buildShortcutPattern
+  buildShortcutPattern,
+  isUnicodeEmoji,
+  resolveEmojiImg
 } from '../lib/aluEmoji'
 
 // 这些容器内的文本不参与替换
 const SKIP_SELECTOR =
   '.notion-code, pre, code, a, .notion-bookmark, .notion-asset-wrapper, .notion-callout-emoji'
 
-// 按长度降序构建交替正则，长模式优先（与评论 convertTextToEmoji 行为一致）
+// 按长度降序构建交替正则，长模式优先（与评论 convertTextToEmoji 行为一致）；
+// 末尾追加通用 emoji 模式，未映射的 emoji 走兜底图标，不残留原生 emoji
 const EMOJI_REGEX = new RegExp(
-  SORTED_SHORTCUTS.map(buildShortcutPattern).join('|'),
-  'g'
+  SORTED_SHORTCUTS.map(buildShortcutPattern).join('|') + '|' + GENERIC_EMOJI_SRC,
+  'gu'
 )
 // 无 g 标记的测试副本（避免 lastIndex 副作用）
-const EMOJI_TEST_REGEX = new RegExp(EMOJI_REGEX.source)
+const EMOJI_TEST_REGEX = new RegExp(EMOJI_REGEX.source, 'u')
 
 function replaceEmojiInTextNode(node) {
   const parent = node.parentNode
@@ -38,11 +40,12 @@ function replaceEmojiInTextNode(node) {
       frag.appendChild(document.createTextNode(text.slice(lastIndex, match.index)))
     }
     const key = match[0].replace(/\uFE0F$/g, '')
+    const label = isUnicodeEmoji(key) ? '' : key
     const img = document.createElement('img')
     img.className = 'alu-emoji'
-    img.src = `${ALU_BASE}/${ALU_EMOJI_MAP[key]}`
-    img.alt = key
-    img.title = key
+    img.src = resolveEmojiImg(match[0])
+    img.alt = label
+    img.title = label
     img.loading = 'lazy'
     img.decoding = 'async'
     frag.appendChild(img)

@@ -122,6 +122,30 @@ const EMOJI_ALU_MAP = {
   '⁉': 'icon_exclaim.gif'
 }
 
+// 未映射 emoji 的兜底图标（保证任何 emoji 都不以原生形式残留）
+const FALLBACK_ALU_IMG = 'icon_smile.gif'
+
+// Unicode emoji 主要区段（不含常规符号区：箭头 U+2190-21FF、©®™ 等，避免误伤正文符号）
+const EMOJI_CHARS = '\\u{1F000}-\\u{1FAFF}\\u{2600}-\\u{27BF}\\u{2B00}-\\u{2BFF}'
+
+/**
+ * 通用 emoji 匹配源字符串：
+ * 区域指示符对（国旗）优先，其次单字符 + 变体选择符 + ZWJ 序列 + 肤色修饰
+ * 供正文组件拼入 alternation 正则（需 u flag）
+ */
+const GENERIC_EMOJI_SRC = `(?:[\\u{1F1E6}-\\u{1F1FF}]{2}|[${EMOJI_CHARS}](?:\\u{FE0F})?(?:\\u{200D}[${EMOJI_CHARS}](?:\\u{FE0F})*)*(?:[\\u{1F3FB}-\\u{1F3FF}])?)`
+
+const GENERIC_EMOJI_REGEX = new RegExp(GENERIC_EMOJI_SRC, 'gu')
+
+/**
+ * 解析快捷码/emoji 对应的图片路径
+ * 未映射的 emoji 使用兜底图标，保证渲染层不残留任何原生 emoji
+ */
+function resolveEmojiImg(shortcut) {
+  const key = String(shortcut || '').replace(/\uFE0F$/g, '')
+  return `${ALU_BASE}/${ALU_EMOJI_MAP[key] || FALLBACK_ALU_IMG}`
+}
+
 // 判断是否为 Unicode emoji（含代理对或符号区），用于追加变体选择符兼容
 function isUnicodeEmoji(shortcut) {
   return /[\uD800-\uDBFF\u2190-\u2BFF]/.test(shortcut)
@@ -201,16 +225,22 @@ export function convertTextToEmoji(text) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
 
-  // 按长度降序替换（长模式优先）
+  // 按长度降序替换（长模式优先）；emoji 键的 alt/title 留空，
+  // 避免图片加载失败时兜底显示原生 emoji
   for (const shortcut of SORTED_SHORTCUTS) {
     const img = ALU_EMOJI_MAP[shortcut]
+    const label = isUnicodeEmoji(shortcut) ? '' : shortcut
     const regex = new RegExp(buildShortcutPattern(shortcut), 'g')
     result = result.replace(
       regex,
-      `<img class="alu-emoji" src="${ALU_BASE}/${img}" alt="${shortcut}" title="${shortcut}" />`
+      `<img class="alu-emoji" src="${ALU_BASE}/${img}" alt="${label}" title="${label}" />`
     )
   }
 
+  // 兜底：替换所有未映射的 Unicode emoji，不残留任何原生 emoji
+  result = result.replace(GENERIC_EMOJI_REGEX, match =>
+    `<img class="alu-emoji" src="${resolveEmojiImg(match)}" alt="" />`
+  )
   return result
 }
 
@@ -228,7 +258,11 @@ export {
   ALU_EMOJI_LIST,
   ALU_EMOJI_MAP,
   EMOJI_ALU_MAP,
+  FALLBACK_ALU_IMG,
+  GENERIC_EMOJI_SRC,
+  GENERIC_EMOJI_REGEX,
   SORTED_SHORTCUTS,
   buildShortcutPattern,
-  isUnicodeEmoji
+  isUnicodeEmoji,
+  resolveEmojiImg
 }
