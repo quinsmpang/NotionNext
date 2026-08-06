@@ -10,7 +10,8 @@ import { useEffect } from 'react'
 import {
   ALU_BASE,
   ALU_EMOJI_MAP,
-  SORTED_SHORTCUTS
+  SORTED_SHORTCUTS,
+  buildShortcutPattern
 } from '../lib/aluEmoji'
 
 // 这些容器内的文本不参与替换
@@ -19,7 +20,7 @@ const SKIP_SELECTOR =
 
 // 按长度降序构建交替正则，长模式优先（与评论 convertTextToEmoji 行为一致）
 const EMOJI_REGEX = new RegExp(
-  SORTED_SHORTCUTS.map(s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'),
+  SORTED_SHORTCUTS.map(buildShortcutPattern).join('|'),
   'g'
 )
 // 无 g 标记的测试副本（避免 lastIndex 副作用）
@@ -36,11 +37,12 @@ function replaceEmojiInTextNode(node) {
     if (match.index > lastIndex) {
       frag.appendChild(document.createTextNode(text.slice(lastIndex, match.index)))
     }
+    const key = match[0].replace(/\uFE0F$/g, '')
     const img = document.createElement('img')
     img.className = 'alu-emoji'
-    img.src = `${ALU_BASE}/${ALU_EMOJI_MAP[match[0]]}`
-    img.alt = match[0]
-    img.title = match[0]
+    img.src = `${ALU_BASE}/${ALU_EMOJI_MAP[key]}`
+    img.alt = key
+    img.title = key
     img.loading = 'lazy'
     img.decoding = 'async'
     frag.appendChild(img)

@@ -32,14 +32,120 @@ const ALU_EMOJI_LIST = [
 ]
 
 /**
+ * Unicode emoji → alu 图标映射（情感相近）
+ * 键为基础码点（不含 \uFE0F 变体选择符，匹配时自动兼容）
+ * 未覆盖的 emoji（如 ZWJ 序列、肤色变体、无关符号）保持原样
+ */
+const EMOJI_ALU_MAP = {
+  // 微笑 / 开心
+  '😀': 'icon_smile.gif',
+  '😃': 'icon_smile.gif',
+  '😄': 'icon_smile.gif',
+  '😊': 'icon_smile.gif',
+  '🙂': 'icon_smile.gif',
+  '😇': 'icon_mrgreen.gif',
+  // 大笑 / 笑哭
+  '😁': 'icon_biggrin.gif',
+  '😆': 'icon_biggrin.gif',
+  '😝': 'icon_biggrin.gif',
+  '😂': 'icon_lol.gif',
+  '🤣': 'icon_lol.gif',
+  '🥳': 'icon_biggrin.gif',
+  // 调皮 / 眨眼 / 吐舌
+  '😉': 'icon_wink.gif',
+  '😜': 'icon_wink.gif',
+  '😋': 'icon_razz.gif',
+  '😛': 'icon_razz.gif',
+  '🤪': 'icon_razz.gif',
+  '🤭': 'icon_mrgreen.gif',
+  // 酷 / 得意
+  '😎': 'icon_cool.gif',
+  '🤓': 'icon_cool.gif',
+  '🧐': 'icon_cool.gif',
+  '😏': 'icon_mrgreen.gif',
+  // 困惑 / 无语
+  '🤔': 'icon_confused.gif',
+  '🤨': 'icon_confused.gif',
+  '🙃': 'icon_confused.gif',
+  '😕': 'icon_confused.gif',
+  '🙄': 'icon_rolleyes.gif',
+  '😒': 'icon_rolleyes.gif',
+  '😐': 'icon_neutral.gif',
+  '😑': 'icon_neutral.gif',
+  '😶': 'icon_neutral.gif',
+  // 惊讶 / 震惊
+  '😮': 'icon_surprised.gif',
+  '😲': 'icon_surprised.gif',
+  '😯': 'icon_surprised.gif',
+  '😳': 'icon_redface.gif',
+  '😦': 'icon_eek.gif',
+  '😧': 'icon_eek.gif',
+  '😨': 'icon_eek.gif',
+  '😱': 'icon_eek.gif',
+  '🤯': 'icon_eek.gif',
+  // 难过 / 哭泣
+  '😢': 'icon_cry.gif',
+  '😭': 'icon_cry.gif',
+  '😔': 'icon_sad.gif',
+  '😞': 'icon_sad.gif',
+  '😟': 'icon_sad.gif',
+  '🙁': 'icon_sad.gif',
+  '☹': 'icon_sad.gif',
+  '😥': 'icon_sad.gif',
+  '😓': 'icon_sad.gif',
+  '😩': 'icon_sad.gif',
+  '😫': 'icon_sad.gif',
+  // 生气
+  '😠': 'icon_mad.gif',
+  '😡': 'icon_mad.gif',
+  '🤬': 'icon_mad.gif',
+  '😤': 'icon_mad.gif',
+  '😖': 'icon_mad.gif',
+  '😾': 'icon_mad.gif',
+  // 邪恶
+  '😈': 'icon_evil.gif',
+  '👿': 'icon_evil.gif',
+  '💀': 'icon_evil.gif',
+  '👹': 'icon_evil.gif',
+  // 心动 / 脸红
+  '😍': 'icon_redface.gif',
+  '🥰': 'icon_redface.gif',
+  '😘': 'icon_redface.gif',
+  '🥺': 'icon_redface.gif',
+  // 其他
+  '💡': 'icon_idea.gif',
+  '❓': 'icon_question.gif',
+  '❔': 'icon_question.gif',
+  '❗': 'icon_exclaim.gif',
+  '❕': 'icon_exclaim.gif',
+  '‼': 'icon_exclaim.gif',
+  '⁉': 'icon_exclaim.gif'
+}
+
+// 判断是否为 Unicode emoji（含代理对或符号区），用于追加变体选择符兼容
+function isUnicodeEmoji(shortcut) {
+  return /[\uD800-\uDBFF\u2190-\u2BFF]/.test(shortcut)
+}
+
+/**
+ * 生成单个快捷码的匹配模式
+ * Unicode emoji 后追加可选的 \uFE0F 变体选择符（如 😄️ 与 😄 都匹配）
+ */
+function buildShortcutPattern(shortcut) {
+  const escaped = escapeRegex(shortcut)
+  return isUnicodeEmoji(shortcut) ? `${escaped}\\uFE0F?` : escaped
+}
+
+/**
  * 文本快捷键 → 图片文件名映射（按长度降序，保证长模式优先匹配）
- * 包含命名快捷码和 ASCII 表情符号
+ * 包含命名快捷码、ASCII 表情符号和 Unicode emoji
  */
 function buildEmojiMap() {
   const map = {}
   for (const item of ALU_EMOJI_LIST) {
     map[item.shortcut] = item.img
   }
+  Object.assign(map, EMOJI_ALU_MAP)
   // ASCII 表情符号（与 WordPress 插件完全对齐）
   const asciiMap = {
     '8-)': 'icon_cool.gif',
@@ -98,8 +204,7 @@ export function convertTextToEmoji(text) {
   // 按长度降序替换（长模式优先）
   for (const shortcut of SORTED_SHORTCUTS) {
     const img = ALU_EMOJI_MAP[shortcut]
-    const escaped = escapeRegex(shortcut)
-    const regex = new RegExp(escaped, 'g')
+    const regex = new RegExp(buildShortcutPattern(shortcut), 'g')
     result = result.replace(
       regex,
       `<img class="alu-emoji" src="${ALU_BASE}/${img}" alt="${shortcut}" title="${shortcut}" />`
@@ -110,11 +215,20 @@ export function convertTextToEmoji(text) {
 }
 
 /**
- * 获取表情图片路径
+ * 获取表情图片路径（自动兼容 emoji 尾部的 \uFE0F 变体选择符）
  */
 export function getEmojiSrc(shortcut) {
-  const img = ALU_EMOJI_MAP[shortcut]
+  const key = String(shortcut || '').replace(/\uFE0F$/g, '')
+  const img = ALU_EMOJI_MAP[key]
   return img ? `${ALU_BASE}/${img}` : null
 }
 
-export { ALU_BASE, ALU_EMOJI_LIST, ALU_EMOJI_MAP, SORTED_SHORTCUTS }
+export {
+  ALU_BASE,
+  ALU_EMOJI_LIST,
+  ALU_EMOJI_MAP,
+  EMOJI_ALU_MAP,
+  SORTED_SHORTCUTS,
+  buildShortcutPattern,
+  isUnicodeEmoji
+}
