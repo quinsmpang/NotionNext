@@ -6,7 +6,7 @@ import BlogItem from './BlogItem'
  * 滚动加载列表
  */
 export default function BlogListScroll(props) {
-  const { posts } = props
+  const { posts, emptyText } = props
   const { locale } = useGlobal()
   const [page, updatePage] = useState(1)
   const postsToShow = posts.slice(0, page * 10)
@@ -33,7 +33,7 @@ export default function BlogListScroll(props) {
         <BlogItem key={post.id} post={post} />
       ))}
       {posts.length === 0 && (
-        <div className='blockGroup is-empty'>No posts yet.</div>
+        <div className='blockGroup is-empty'>{emptyText || 'No posts yet.'}</div>
       )}
       <div ref={targetRef} className='v-textAlignCenter fontSmooth posts-load-btn'>
         {postsToShow.length < posts.length ? (

@@ -48,6 +48,54 @@ const Style = () => {
         color: rgba(0, 0, 0, 0.22);
       }
 
+      /* 空列表状态（无文章 / 搜索无结果） */
+      #theme-quinsm .blockGroup.is-empty {
+        padding: 3.5rem 1.5rem;
+        margin: 0.25rem 0 1.5rem;
+        text-align: center;
+        color: rgba(0, 0, 0, 0.42);
+        font-size: 14px;
+        letter-spacing: 0.02em;
+        background: rgba(0, 0, 0, 0.018);
+        border: 1px dashed rgba(0, 0, 0, 0.14);
+        border-radius: 10px;
+      }
+      .dark #theme-quinsm .blockGroup.is-empty {
+        color: rgba(255, 255, 255, 0.42);
+        background: rgba(255, 255, 255, 0.03);
+        border-color: rgba(255, 255, 255, 0.14);
+      }
+
+      /* 搜索输入框 */
+      #theme-quinsm .textInput--singleLine {
+        width: 100%;
+        padding: 9px 14px;
+        font-size: 14px;
+        line-height: 1.5;
+        color: inherit;
+        background: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.16);
+        border-radius: 8px;
+        transition:
+          border-color 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+      #theme-quinsm .textInput--singleLine::placeholder {
+        color: rgba(0, 0, 0, 0.35);
+      }
+      #theme-quinsm .textInput--singleLine:focus {
+        outline: none;
+        border-color: #f3a500;
+        box-shadow: 0 0 0 3px rgba(243, 165, 0, 0.14);
+      }
+      .dark #theme-quinsm .textInput--singleLine {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.18);
+      }
+      .dark #theme-quinsm .textInput--singleLine::placeholder {
+        color: rgba(255, 255, 255, 0.35);
+      }
+
       /* 内容页：保持原图片布局，仅优化正文阅读节奏（紧凑排版） */
       #theme-quinsm .postArticle {
         padding-top: 20px;

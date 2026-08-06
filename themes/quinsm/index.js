@@ -118,6 +118,7 @@ const LayoutPostList = props => {
  */
 const LayoutSearch = props => {
   const { keyword } = props
+  const { locale } = useGlobal()
 
   useEffect(() => {
     if (isBrowser) {
@@ -139,7 +140,7 @@ const LayoutSearch = props => {
   return (
     <TwoColumnLayout {...props}>
       <div className='layoutMultiColumn-header hero hero--underline fontSmooth'>
-        <h2 className='hero-title'>Search</h2>
+        <h2 className='hero-title'>{locale.NAV.SEARCH || '搜索'}</h2>
       </div>
       {slotTop}
       {siteConfig('POST_LIST_STYLE') === 'page' ? (
