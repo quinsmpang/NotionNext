@@ -20,8 +20,10 @@ const Search = props => {
   // 静态过滤；无关键词时展示全部文章，避免搜索页出现空态
   if (keyword) {
     filteredPosts = posts.filter(post => {
-      const tagContent = post?.tags ? post?.tags.join(' ') : ''
-      const categoryContent = post.category ? post.category.join(' ') : ''
+      const tagContent = Array.isArray(post?.tags) ? post.tags.join(' ') : post?.tags || ''
+      const categoryContent = Array.isArray(post.category)
+        ? post.category.join(' ')
+        : post.category || ''
       const searchContent =
         post.title + post.summary + tagContent + categoryContent
       return searchContent.toLowerCase().includes(keyword.toLowerCase())
