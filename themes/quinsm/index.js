@@ -26,6 +26,9 @@ const ArticleLock = dynamic(() => import('./components/ArticleLock'), {
 })
 import ArticleInfo from './components/ArticleInfo'
 const QuinsmComments = dynamic(() => import('./components/QuinsmComments'), { ssr: false })
+const AluEmojiInArticle = dynamic(() => import('./components/AluEmojiInArticle'), {
+  ssr: false
+})
 const ArticleAround = dynamic(() => import('./components/ArticleAround'), {
   ssr: false
 })
@@ -191,6 +194,7 @@ const LayoutSlug = props => {
                 itemProp='articleBody'
               >
                 <NotionPage post={post} />
+                <AluEmojiInArticle />
               </div>
               <div className='postFooter-ad v-textAlignCenter v-overflowHidden'>
                 <AdSlot type='in-article' />
